@@ -10,6 +10,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: Build and push the image
         run:
-          docker login --usernaem Peng-LUH --password ${{ secrets.GH_PAT }} ghcr.io
+          docker login --username Peng-LUH --password ${{ secrets.GH_PAT }} ghcr.io
           docker build -t ghcr.io/peng-luh/l3s-offshore-plan-2:latest .
           docker push ghcr.io/peng-luh/l3s-offshore-plan-2:latest
