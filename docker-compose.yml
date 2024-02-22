@@ -1,0 +1,11 @@
+## Docker Compose
+services:
+    search-l3s-recsys_service:
+        image: ghcr.io/e-learning-by-sse/search-l3s_recsys_service:latest
+        restart: unless-stopped
+        networks:
+            - search
+        ports:
+            - "9042:9042"
+networks:
+    search:
