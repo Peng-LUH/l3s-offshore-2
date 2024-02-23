@@ -7,7 +7,7 @@ RUN apt-get update
 RUN apt-get -y install python3-dev
 
 RUN pip install --upgrade pip setuptools wheel
-RUN pip install -r requirements.txt
+# RUN pip install -r requirements.txt
 RUN pip install -e .
 
 
