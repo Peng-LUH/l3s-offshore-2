@@ -28,4 +28,6 @@ dist
 **/datasets/*
 **/.archiv/*
 
+# files
 docker-compose.yml
+requirements.txt
