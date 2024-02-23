@@ -1,0 +1,18 @@
+## Docker Compose
+services:
+    l3s-offshore-plan-2-srv:
+        image: ghcr.io/peng-luh/l3s-offshore-plan-2:latest
+        # build: .
+        restart: unless-stopped
+        networks:
+            - l3s-offshore-plan-2-net
+        ports:
+            - "9040:9040"
+        environment:
+            - FLASK_APP=run.py
+            - FLASK_DEBUG=1
+            - FLASK_RUN_HOST=0.0.0.0
+            - FLASK_RUN_PORT=9040
+            - HOST_IP=localhost
+networks:
+    l3s-offshore-plan-2-net:
