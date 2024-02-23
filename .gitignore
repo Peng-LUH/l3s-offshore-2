@@ -27,3 +27,5 @@ dist
 .bash
 **/datasets/*
 **/.archiv/*
+
+docker-compose.yml
