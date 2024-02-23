@@ -27,7 +27,8 @@ dist
 .bash
 **/datasets/*
 **/.archiv/*
-**/.github/*
+
+
 # files
 docker-compose.yml
 requirements.txt
