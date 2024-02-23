@@ -1,4 +1,4 @@
-FROM python:3.9.17-slim
+FROM python:3.9-slim
 
 WORKDIR /code
 COPY . /code
