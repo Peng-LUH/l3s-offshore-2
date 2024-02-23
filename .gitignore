@@ -31,3 +31,4 @@ dist
 # files
 docker-compose.yml
 requirements.txt
+bash_init.sh
