@@ -33,3 +33,4 @@ dist
 docker-compose.yml
 requirements.txt
 bash_init.sh
+.aider*

@@ -23,3 +23,8 @@ api.add_namespace(ns_test, path="/test")
 # from l3s_offshore_2.api.random.endpoints import ns_random
 # api.add_namespace(ns_random, path="/random")
 
+
+from l3s_offshore_2.api.model_x_srv.endpoints import ns as model_x_ns
+api.add_namespace(model_x_ns, path="/model-x")
+
+
