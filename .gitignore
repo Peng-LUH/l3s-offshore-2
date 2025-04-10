@@ -34,3 +34,9 @@ docker-compose.yml
 requirements.txt
 bash_init.sh
 .aider*
+
+#folder contents
+build/*
+
+#krausality specific
+allfiles.txt

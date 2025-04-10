@@ -85,7 +85,7 @@ pip install -e .[dev]
 ## Running Locally
 
 We rely on a small `run.py` that uses the `create_app` factory from `src/l3s_offshore_2/__init__.py`.  
-Make sure `FLASK_APP=run.py` and `FLASK_ENV=development` are set in your environment (or `.env` file). Then:
+Make sure `FLASK_APP=run.py` and `FLASK_DEBUG=true` are set in your environment (or `.env` file). Then:
 
 ```bash
 flask run --host=0.0.0.0 --port=9040

@@ -1,6 +1,6 @@
 """Flask app initialization via factory pattern."""
 
-from flask import Flask, redirect
+from flask import Flask, redirect, request
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -34,5 +34,5 @@ def create_app(config_name):
     
     @app.route('/')
     def index():
-        return redirect(f"http://{os.getenv('HOST_IP')}:{os.getenv('FLASK_RUN_PORT')}/l3s-offshore-2", code=200)
+        return redirect(f"{request.host_url}l3s-offshore-2")
     return app

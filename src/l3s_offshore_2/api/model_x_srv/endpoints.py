@@ -16,11 +16,14 @@ from flask import request
 from flask_restx import Namespace, Resource
 from http import HTTPStatus
 
-from .dto import planning_request, planning_response
+from .dto import workforce_management_dto, scenario_dto, petri_net_dto, planning_request, planning_response
 
 ns = Namespace("model_x", description="Offshore Planning API")
 
-# Registrierung der Modelle im Namespace
+# Register models with the namespace
+ns.models[workforce_management_dto.name] = workforce_management_dto
+ns.models[scenario_dto.name] = scenario_dto
+ns.models[petri_net_dto.name] = petri_net_dto
 ns.models[planning_request.name] = planning_request
 ns.models[planning_response.name] = planning_response
 
