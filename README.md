@@ -115,7 +115,12 @@ All endpoints are documented via **Swagger** courtesy of **Flask-RESTx**.
 
 ## Workforce & Petri-Net Parameters
 
-The core parameters for workforce management and the Petri net simulation are defined in `dto.py` inside the `model_x_srv` folder.
+The core parameters for scenario, workforce management and the Petri net simulation are defined in `dto.py` inside the `model_x_srv` folder.
+
+For further documentation access the **Swagger UI** at:  
+[http://localhost:9040/l3s-offshore-2/swagger.json](http://localhost:9040/l3s-offshore-2/swagger.json)
+
+### The following part is outdated!
 
 ### Workforce Management
 
