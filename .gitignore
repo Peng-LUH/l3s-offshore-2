@@ -25,7 +25,7 @@ dist
 **/*.egg-info/*
 .dockercmd
 .bash
-**/datasets/*
+# **/datasets/*
 **/.archiv/*
 
 
