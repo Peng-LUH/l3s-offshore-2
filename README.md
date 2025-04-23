@@ -1,10 +1,9 @@
 # L3S Offshore 2
 
 A boilerplate Flask API that demonstrates:
-- **JWT-based auth** (planned),
 - **Flask-RESTx** routing and auto-docs,
 - **SQLAlchemy** (basic setup),
-- **Workforce Management (WFM)** and **Petri Net (PN)** parameter handling,
+- **Workforce Management (WFM)**, **Scenario** and **Petri Net (PN)** parameter handling,
 - A **Docker** environment for containerization,
 - Jenkins pipeline for CI/CD,
 - Tox/pytest for testing.
