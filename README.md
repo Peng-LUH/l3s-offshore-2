@@ -119,68 +119,11 @@ The core parameters for scenario, workforce management and the Petri net simulat
 For further documentation access the **Swagger UI** at:  
 [http://localhost:9040/l3s-offshore-2/swagger.json](http://localhost:9040/l3s-offshore-2/swagger.json)
 
-### The following part is outdated!
-
-### Workforce Management
-
-| Parameter                | Description                                                           |
-|--------------------------|-----------------------------------------------------------------------|
-| `performWFM`            | Boolean to toggle workforce management on/off                         |
-| `epsilon`               | Penalization factor for changing assigned crew or persons often       |
-| `maxHoursPerDay`        | Array of max daily hours for each ruleset ID                          |
-| `maxHoursPerWeek`       | Array of max weekly hours for each ruleset ID                         |
-| `minPauseBlock`         | Array of minimum rest (in hours) between shifts                       |
-| `minSmallPause`         | Array of short break durations (in hours)                             |
-| `minSmallPausePerHours` | After how many hours a short break is needed                          |
-| `skills`                | List of skill names (e.g. "Install", "Vessel", "Agency")              |
-| `jobTypeSkills`         | Mapping from job type to required skill set                           |
-| `personTypeSkills`      | Mapping from person type to possessed skill set                       |
-| `persons`               | List of persons or roles                                              |
-| `costPerson`            | Cost per person (parallel to `persons`)                               |
-| `location`              | Vessel ID or 0=port for each person                                   |
-| `ruleset`               | Which ruleset each person adheres to for hours/pauses                 |
-
-### Petri Net (PN)
-
-| Parameter           | Description                                                    |
-|---------------------|----------------------------------------------------------------|
-| `start_date`        | Date the simulation starts                                    |
-| `end_date`          | Date the simulation ends                                      |
-| `delta_time`        | Simulation-step increment                                     |
-| `max_loop`          | Maximum loop iterations                                       |
-| `print_loop_number` | Whether to log loop numbers for debugging                     |
-| `owf_size`          | Size of the offshore wind farm (# of turbines)               |
-| `ini_storage`       | Initial storage capacity in port                              |
-| `storage_max`       | Maximum storage capacity                                      |
-| `sotrage_min`       | Minimum storage threshold (typo kept for code-compatibility)  |
-| `num_agent`         | Number of installation vessels used                           |
-| `capacity_iv`       | Capacity of each vessel                                      |
-| `operation_duration`| Time spent on each operation (e.g. load, move, jack up, etc.)|
-| `lim_weather`       | Weather constraints (wind & wave) per operation step         |
-| `fair_mode`         | Fairness approach for scheduling                             |
-| `pruning_flag`      | How aggressively the search space is pruned                  |
-| `tau`               | Tolerance parameter for pruning                              |
-| `search_space`      | BFS/DFS limit or branching factor                            |
-| `windDataFile`      | CSV path for wind data                                       |
-| `waveDataFile`      | CSV path for wave data                                       |
 
 Example JSON for a `POST` request to `/model-x/planning` might look like:
+
 ```json
-{
-  "wfm": {
-    "performWFM": true,
-    "epsilon": 10,
-    "maxHoursPerDay": [14, 12, 10],
-    "maxHoursPerWeek": [72, 48, 40],
-    "...": "... more WFM fields ..."
-  },
-  "pn": {
-    "start_date": "2025-03-17",
-    "end_date": "2025-03-27",
-    "delta_time": 1,
-    "...": "... more PN fields ..."
-  }
-}
+Todo
 ```
 
 ---
