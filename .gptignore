@@ -47,6 +47,8 @@
         "dist",
         ".venv",
         ".aider.chat.history.md",
-        ".aider.input.history"
+        ".aider.input.history",
+        "*.xes",
+        "makespan_data.txt"
     ]
 }
