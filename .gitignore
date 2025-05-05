@@ -41,3 +41,6 @@ build/*
 #krausality specific
 allfiles.txt
 @Martin
+Seafile
+.gitignore
+SIMULATION-BASED_SCHEDULINGFOR_OFFSHORE.txt
