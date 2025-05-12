@@ -170,6 +170,7 @@ class SimpleSimulator:
         #     }
         
         # 4. Prepare logs
+        self.detailed_log    = dict()
         self.firing_log      = defaultdict(list)   # per‐transition timestamps
         self.firing_sequence = []                  # global ordered list
 
@@ -252,12 +253,24 @@ class SimpleSimulator:
                 # max_prio = max(t.priority for t in enabled_transitions)
                 # print(max_prio)
                 
+                
+                
+                
                 # batch    = [t for t in enabled_transitions if t.priority == max_prio]
                 batch    = [t for t in enabled_transitions]
                 
-                
+                now = self.env.now
+                enabled_transitions_label = [t.label for t in enabled_transitions]
                 transition_to_fire = random.choice(batch)
-                print(transition_to_fire)
+                # print(transition_to_fire)
+                
+                self.detailed_log.update(
+                    {now: {
+                    "enabled_transitions" : enabled_transitions_label,
+                    "transition_to_fire" : transition_to_fire.label
+                    }}
+                )
+                
                 # for t in batch:
                 self.__fire_transition(transition_to_fire)
                 

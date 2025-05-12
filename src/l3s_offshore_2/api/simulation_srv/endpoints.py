@@ -11,8 +11,7 @@ from flask import request, url_for
 from flask_restx import Namespace, Resource, fields
 from flask_restx.reqparse import RequestParser
 
-# from l3s_offshore_2.api.test import ns_sim
-from l3s_offshore_2.petri_net_sim.simplepn import SimplePN, SimpleSimulator
+from .logic import simple_sim_run
 
 ## import dto
 from .dto import test_model
@@ -56,16 +55,10 @@ class SimpleSimulation(Resource):
             # write the uploaded data into the temp file
             pnml_file.save(temp_pnml_path)
             
+            sim_results = simple_sim_run(pnml_path=temp_pnml_path)
             
-            pn, im, fm = pm4py.read_pnml(file_path=temp_pnml_path)
             
-            simple_pn = SimplePN.convert_to_simple_pn(pn=pn, initial_marking=im)
-            
-            sim = SimpleSimulator(net=simple_pn, initial_marking=im)
-            
-            sim.run()
-            
-            return {"results": sim.get_firing_sequence()}, HTTPStatus.CREATED
+            return {"results": sim_results}, HTTPStatus.CREATED
             
         except TypeError as e:
             return {"message": e.args}, HTTPStatus.BAD_REQUEST
