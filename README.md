@@ -17,44 +17,6 @@ A boilerplate Flask API that demonstrates:
 6. [Deployment with Docker](#deployment-with-docker)
 7. [Testing](#testing)
 
----
-
-## Project Structure
-
-```
-.
-├── Dockerfile
-├── Jenkinsfile
-├── pyproject.toml
-├── pytest.ini
-├── README.md
-├── run.py
-├── setup.py
-├── src
-│   └── l3s_offshore_2
-│       ├── __init__.py
-│       ├── api
-│       │   ├── __init__.py
-│       │   ├── model_x_srv
-│       │   │   ├── __init__.py
-│       │   │   ├── dto.py
-│       │   │   ├── endpoints.py
-│       │   │   └── logic.py
-│       │   ├── random
-│       │   │   ├── __init__.py
-│       │   │   ├── dto.py
-│       │   │   ├── endpoints.py
-│       │   │   └── logic.py
-│       │   └── test
-│       │       ├── __init__.py
-│       │       ├── dto.py
-│       │       └── endpoints.py
-│       ├── config.py
-│       └── util
-│           ├── datetime_util.py
-│           └── result.py
-└── tox.ini
-```
 
 ---
 

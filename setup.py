@@ -33,7 +33,8 @@ INSTALL_REQUIRES = [
     "pytest-flake8==1.1.0",
     "flake8==3.9.2",
     "black",
-    "pm4py"
+    "pm4py",
+    "simpy==4.1.1"
 ]
 EXTRAS_REQUIRE = {
     "dev": [
