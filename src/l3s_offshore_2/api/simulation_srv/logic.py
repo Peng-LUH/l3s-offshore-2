@@ -13,8 +13,11 @@ def simple_sim_run(pnml_path):
     
     sim.run()
     
+    # Extracting only the PNML IDs from the firing_sequence
+    firing_seq_ids = [pnml_id for pnml_id, timestamp in sim.firing_sequence]
+    
     simulation_results = {
-        "firing_seq" : sim.get_firing_sequence(),
+        "firing_seq" : firing_seq_ids, # Use the new list of PNML IDs
         "detailed_log": sim.detailed_log
     }
     return simulation_results

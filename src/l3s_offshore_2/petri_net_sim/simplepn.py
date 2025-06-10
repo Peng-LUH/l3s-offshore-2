@@ -193,10 +193,10 @@ class SimpleSimulator:
             self.current_marking[arc.target.name] += arc.weight
 
         # log the event
-        now = self.env.now  # current sim time :contentReference[oaicite:7]{index=7}
-        self.firing_log[t.label].append(now)
-        self.firing_sequence.append((t.label, now))
-        print(f"[{now}] Fired {t.label}; tokens={self.current_marking}")
+        now = self.env.now  # current sim time
+        self.firing_log[t.name].append(now)
+        self.firing_sequence.append((t.name, now))
+        print(f"[{now}] Fired PNML-ID: {t.name} (Label: {t.label}); tokens={self.current_marking}")
         
         
     def is_transition_enabled(self, transition: SimplePN.SimpleTransition) -> bool:
@@ -260,14 +260,14 @@ class SimpleSimulator:
                 batch    = [t for t in enabled_transitions]
                 
                 now = self.env.now
-                enabled_transitions_label = [t.label for t in enabled_transitions]
+                enabled_transitions_names = [t.name for t in enabled_transitions]
                 transition_to_fire = random.choice(batch)
                 # print(transition_to_fire)
                 
                 self.detailed_log.update(
                     {now: {
-                    "enabled_transitions" : enabled_transitions_label,
-                    "transition_to_fire" : transition_to_fire.label
+                    "enabled_transitions" : enabled_transitions_names,
+                    "transition_to_fire" : transition_to_fire.name
                     }}
                 )
                 
