@@ -30,23 +30,27 @@ INSTALL_REQUIRES = [
     "Werkzeug==2.2.2",
     "markupsafe",
     "SQLAlchemy==1.4.0",
-    "pytest-flake8==1.1.0",
-    "flake8==3.9.2",
+    "pytest-flake8>=1.1.1; python_version>='3.11'",
+    "flake8>=5.0.0,<7.0.0; python_version>='3.11'",
+    "pytest-flake8==1.1.0; python_version<'3.11'",
+    "flake8==3.9.2; python_version<'3.11'",
     "black",
     "pm4py",
-    "simpy==4.1.1"
+    "simpy==4.1.1",
 ]
 EXTRAS_REQUIRE = {
     "dev": [
         "black",
-        "flake8==3.9.2",
+        "flake8>=5.0.0,<7.0.0; python_version>='3.11'",
+        "flake8==3.9.2; python_version<'3.11'",
         "pre-commit",
         "pydocstyle",
         "pytest",
         "pytest-black",
         "pytest-clarity",
         "pytest-dotenv",
-        "pytest-flake8==1.1.0",
+        "pytest-flake8>=1.1.1; python_version>='3.11'",
+        "pytest-flake8==1.1.0; python_version<'3.11'",
         "pytest-flask",
         "tox",
     ]

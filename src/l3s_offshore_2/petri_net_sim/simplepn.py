@@ -154,7 +154,7 @@ class SimpleSimulator:
         self.net = net
         
         # 2. Place‐token mapping (copy from Marking dict)
-        #    Marking is a dict Place→int in PM4Py :contentReference[oaicite:6]{index=6}
+        #    Marking is a dict Place->int in PM4Py :contentReference[oaicite:6]{index=6}
         self.initial_marking = initial_marking
         self.current_marking = {p.name: initial_marking.get(p, 0) for p in net.places}
 
@@ -278,8 +278,8 @@ class SimpleSimulator:
                 print(f"Enabled Transitions: {enabled_transitions}")
                 
                 if enabled_transitions == []:
-                    # No transitions → end simulation
-                    print("No more enabled transitions → simulation ends")
+                    # No transitions -> end simulation
+                    print("No more enabled transitions -> simulation ends")
                     break
                 
                 
@@ -306,7 +306,7 @@ class SimpleSimulator:
     
     def get_firing_sequence(self):
         """
-        Return an OrderedDict of transitions → timestamp of first firing.
+        Return an OrderedDict of transitions -> timestamp of first firing.
         """
         seq = OrderedDict()
         for t, ts in self.firing_sequence:
