@@ -28,8 +28,8 @@ git clone https://github.com/Peng-LUH/l3s-offshore-2
 cd l3s_offshore_2
 
 # 2) Create & Activate Virtual Environment (optional, recommended)
-python -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
+python -m venv .venv
+source .venv/bin/activate  # or .venv\Scripts\activate on Windows
 
 # 3) Install dependencies in editable mode
 pip install -e .
