@@ -13,7 +13,7 @@ MODELS_DIR = os.path.join(
     'Models'
 )
 
-simulation_petri_nets_ns = Namespace('simulation-petri-nets', description='Simulation Petri Net operations')
+simulation_petri_nets_ns = Namespace('Simulation', description='Simulation Petri Net operations')
 
 @simulation_petri_nets_ns.route('/example-models')
 class ExampleModelsList(Resource):
