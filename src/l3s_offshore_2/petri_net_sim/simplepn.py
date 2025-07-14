@@ -252,10 +252,7 @@ class SimpleSimulator:
                 # respect max priority among immediates (GSPN semantics)
                 # max_prio = max(t.priority for t in enabled_transitions)
                 # print(max_prio)
-                
-                
-                
-                
+
                 # batch    = [t for t in enabled_transitions if t.priority == max_prio]
                 batch    = [t for t in enabled_transitions]
                 

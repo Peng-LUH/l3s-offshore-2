@@ -1,21 +1,66 @@
-[tool.black]
-line-length = 92
-target-version = ['py39']
-include = '\.pyi?$'
-exclude =  '''
-/(
-    \.eggs
-    | \.git
-    | \.hg
-    | \.mypy_cache
-    | \.pytest_cache
-    | \.tox
-    | \.vscode
-    | __pycache__
-    | _build
-    | buck-out
-    | build
-    | dist
-    | .venv
-)/
-'''
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "l3s-offshore-2"
+version = "0.0.1"
+description = "Boilerplate Flask API with Flask-RESTx, SQLAlchemy, pytest, flake8, tox configured"
+readme = "README.md"
+authors = [
+    { name="Shengrui Peng", email="peng@l3s.de" }
+]
+maintainers = [
+    { name="Shengrui Peng", email="peng@l3s.de" }
+]
+license = { text = "MIT" }
+requires-python = ">=3.9"
+
+dependencies = [
+    "Flask==2.2.2",
+    "Flask-Bcrypt",
+    "Flask-Cors",
+    "Flask-Migrate",
+    "flask-restx",
+    "Flask-SQLAlchemy",
+    "PyJWT",
+    "python-dateutil",
+    "python-dotenv",
+    "requests",
+    "urllib3",
+    "Werkzeug==2.2.2",
+    "markupsafe",
+    "SQLAlchemy==1.4.0",
+    "pytest-flake8>=1.1.1; python_version>='3.11'",
+    "flake8>=5.0.0,<7.0.0; python_version>='3.11'",
+    "pytest-flake8==1.1.0; python_version<'3.11'",
+    "flake8==3.9.2; python_version<'3.11'",
+    "black",
+    "pm4py",
+    "simpy==4.1.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "flake8>=5.0.0,<7.0.0; python_version>='3.11'",
+    "flake8==3.9.2; python_version<'3.11'",
+    "pre-commit",
+    "pydocstyle",
+    "pytest",
+    "pytest-black",
+    "pytest-clarity",
+    "pytest-dotenv",
+    "pytest-flake8>=1.1.1; python_version>='3.11'",
+    "pytest-flake8==1.1.0; python_version<'3.11'",
+    "pytest-flask",
+    "tox",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]       # discover utils, functions, objects
+
+# You can add additional classifiers if desired, e.g.:
+# [project.classifiers]
+# programming language, topic, etc.
+
