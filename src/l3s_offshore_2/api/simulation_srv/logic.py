@@ -3,8 +3,8 @@ import tempfile
 import json
 # from l3s_offshore_2.api.test import ns_sim
 from l3s_offshore_2.petri_net_sim.simplepn import SimplePN, SimpleSimulator
-from l3s_offshore_2.gspn4py import TimedPetriNet, TimedSimulator
-from l3s_offshore_2.gspn4py import pnml_to_json
+from gspn4py import TimedPetriNet, TimedSimulator
+from gspn4py import pnml_to_json
 from pprint import pprint
 
 def simple_sim_run(pnml_path):
