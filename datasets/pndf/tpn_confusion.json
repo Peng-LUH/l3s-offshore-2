@@ -1,0 +1,42 @@
+{
+    "name": "simple_model",
+    "places": [
+        {
+            "name": "P1",
+            "tokens": 1
+        },
+        {
+            "name": "P2",
+            "tokens": 0
+        },
+        {
+            "name": "P3",
+            "tokens": 0
+        }
+    ],
+
+    "transitions": [
+        {
+            "name": "t1",
+            "label": "",
+            "properties": {},
+            "priority": 0,
+            "duration": 2
+        },
+        {
+            "name": "t2",
+            "label": "", 
+            "properties": {},
+            "priority": 0,
+            "duration": 2
+        }
+    ],
+
+    "arcs": [
+        {"source": "P1", "target": "t1", "weight": 1},
+        {"source": "t1", "target": "P2", "weight": 1},
+        {"source": "P2", "target": "t2", "weight": 1},
+        {"source": "t2", "target": "P3", "weight": 1}
+    ]
+
+}

@@ -1,0 +1,53 @@
+{
+    "name": "jssp_model",
+    "places": {
+            "P10": [{}],
+            "P11": 0,
+            "P12": 0,
+            "P13": 0,
+            "P20": 1,
+            "P21": 0,
+            "P22": 0,
+            "P23": 0,
+            "M1": 1,
+            "M2": 1,
+            "M3": 1
+        },
+    "transitions": {       
+            "O11": {"type": "stochastic", 
+                    "distribution": "exponential",
+                    "params": {"rate": 0.5}, 
+                    "input": ["P11", "M1"], 
+                    "output": ["P12", "M1"]},
+            "O12": {"type": "stochastic",
+                    "distribution": "exponential",
+                    "params": {"rate": 0.25},
+                    "input": ["P12", "M2"], 
+                    "output": ["P13", "M2"]},
+            "O13": {"type": "stochastic",
+                    "distribution": "exponential",
+                    "params": {"rate": 0.33},
+                    "input": ["P10", "M3"], 
+                    "output": ["P11", "M3"]},
+            "O21": {"type": "stochastic",
+                    "distribution": "exponential",
+                    "params": {"rate": 0.2},
+                    "input": ["P22", "M1"], 
+                    "output": ["P23", "M1"]},
+            "O22": {"type": "stochastic",
+                    "distribution": "exponential",
+                    "params": {"rate": 0.5}, 
+                    "input": ["P20", "M2"], 
+                    "output": ["P21", "M2"]},
+            "O23": {"type": "stochastic",
+                    "distribution": "exponential",
+                    "params": {"rate": 0.33},
+                    "input": ["P21", "M3"], 
+                    "output": ["P22", "M3"]}
+        },
+    "Arc": [
+        {},
+        {}
+    ]
+
+}
