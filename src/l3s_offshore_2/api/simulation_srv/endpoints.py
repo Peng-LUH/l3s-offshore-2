@@ -57,6 +57,7 @@ class ExampleModelsList(Resource):
         except Exception as e:
             return {'message': str(e)}, 500
 
+
 @ns_sim.route('/example-models/<string:name>')
 class ExampleModelContent(Resource):
     def get(self, name):
@@ -106,6 +107,8 @@ class SimpleSimulation(Resource):
             
         except TypeError as e:
             return {"message": e.args}, HTTPStatus.BAD_REQUEST
+
+
 
 # @ns_sim.route("/test-get", endpoint="test-get")
 # class RecsysTest(Resource):

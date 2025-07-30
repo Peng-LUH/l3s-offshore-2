@@ -1,0 +1,156 @@
+{
+    "name": "Offshore_Full_Cyclic_Model",
+    "places": [
+        {
+            "name": "P_BP",
+            "label": "BasePort",
+            "tokens": 1
+        },
+        {
+            "name": "P_SF",
+            "label": "ReadySailForth",
+            "tokens": 0
+        },
+        {
+            "name": "P_R",
+            "label": "ReadyReposition",
+            "tokens": 0
+        },
+        {
+            "name": "P_JU",
+            "label": "ReadyJuckUp",
+            "tokens": 0
+        },
+        {
+            "name": "P_C",
+            "label": "Construction",
+            "tokens": 0
+        },
+        {
+            "name": "P_JD",
+            "label": "ReadyJackDown",
+            "tokens": 0
+        },
+        {
+            "name": "P_SB",
+            "label": "ReadySailBack",
+            "tokens": 0
+        },
+        {
+            "name": "P_IV",
+            "label": "AvailableInstallationVessel",
+            "tokens": 1
+        },
+        {
+            "name": "P_OWF",
+            "label": "OffshoreWindFarm",
+            "tokens": 0
+        }
+    ],
+
+    "transitions": [
+        {
+            "name": "t_Load",
+            "label": "LoadingOWT",
+            "properties": {
+                "wind_limit": 99,
+                "wave_limit": 99
+            },
+            "priority": 0,
+            "duration": 12
+        },
+        {
+            "name": "t_SF",
+            "label": "SailingForth",
+            "properties": {
+                "wind_limit": 21,
+                "wave_limit": 2.5
+            },
+            "priority": 0,
+            "duration": 4
+        },
+        {
+            "name": "t_SB",
+            "label": "SailingBack",
+            "properties": {
+                "wind_limit": 21.0,
+                "wave_limit": 2.5
+            },
+            "priority": 0,
+            "duration": 4
+        },
+        {
+            "name": "t_C",
+            "label": "Construction",
+            "properties": {
+                "wind_limit": 10.0,
+                "wave_limit": 99.0
+            },
+            "priority": 0,
+            "duration": 14
+        },
+        {
+            "name": "t_JU",
+            "label": "JackUp",
+            "properties": {
+                "wind_limit": 14.0,
+                "wave_limit": 1.8
+            },
+            "priority": 0,
+            "duration": 2
+        },
+        {
+            "name": "t_JD0",
+            "label": "JackDown",
+            "properties": {
+                "wind_limit": 14.0,
+                "wave_limit": 1.8
+            },
+            "priority": 0,
+            "duration": 2
+        },
+        {
+            "name": "t_JD1",
+            "label": "JackDown",
+            "properties": {
+                "wind_limit": 14.0,
+                "wave_limit": 1.8
+            },
+            "priority": 0,
+            "duration": 2
+        },
+        {
+            "name": "t_R",
+            "label": "Reposition",
+            "properties": {
+                "wind_limit": 14.0,
+                "wave_limit": 2.0
+            },
+            "priority": 0,
+            "duration": 2
+        }
+
+    ],
+
+    "arcs": [
+        {"source": "P_BP", "target": "t_Load", "weight": 1},
+        {"source": "P_IV", "target": "t_Load", "weight": 1},
+        {"source": "t_Load", "target": "P_SF", "weight": 1},
+        {"source": "P_SF", "target": "t_SF", "weight": 1},
+        {"source": "t_SF", "target": "P_R", "weight": 1},
+        {"source": "P_R", "target": "t_R", "weight": 1},
+        {"source": "t_R", "target": "P_JU", "weight": 1},
+        {"source": "P_JU", "target": "t_JU", "weight": 1},
+        {"source": "t_JU", "target": "P_C", "weight": 1},
+        {"source": "P_C", "target": "t_C", "weight": 1},
+        {"source": "t_C", "target": "P_OWF", "weight": 1},
+        {"source": "t_C", "target": "P_JD", "weight": 1},
+        {"source": "P_JD", "target": "t_JD0", "weight": 1},
+        {"source": "P_JD", "target": "t_JD1", "weight": 1},
+        {"source": "t_JD0", "target": "P_R", "weight": 1},
+        {"source": "t_JD1", "target": "P_SB", "weight": 1},
+        {"source": "P_SB", "target": "t_SB", "weight": 1},
+        {"source": "t_SB", "target": "P_IV", "weight": 1}
+    ]
+
+}

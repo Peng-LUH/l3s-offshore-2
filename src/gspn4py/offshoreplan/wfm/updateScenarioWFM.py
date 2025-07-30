@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta
-from utils.application_settings import SETTINGS
+from ..offshore_utils.application_settings import SETTINGS
 
 def update_scenario_wfm(scenario):
     

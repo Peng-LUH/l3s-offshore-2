@@ -1,0 +1,32 @@
+{
+    "name": "unit_sailing_forth",
+    "places": [
+        {
+            "name": "P1",
+            "tokens": 1
+        },
+        {
+            "name": "P2",
+            "tokens": 0
+        }
+    ],
+
+    "transitions": [
+        {
+            "name": "t1",
+            "label": "sailing_forth",
+            "properties": {
+                "wind_limit": 10,
+                "wave_limit": 2
+            },
+            "priority": 0,
+            "duration": 2
+        }
+    ],
+
+    "arcs": [
+        {"source": "P1", "target": "t1", "weight": 1},
+        {"source": "t1", "target": "P2", "weight": 1}
+    ]
+
+}

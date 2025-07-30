@@ -1,7 +1,7 @@
 import numpy as np
 from datetime import datetime, timedelta
-from utils.printMsg import printMsg
-from utils.hours import hours
+from offshore_utils.printMsg import printMsg
+from offshore_utils.hours import hours
 from mainFunctions.computeOpenLoopSolution import compute_open_loop_solution
 
 def compute_closed_loop(scenario, useBudgetingWithOverallDuration, stopTime):
