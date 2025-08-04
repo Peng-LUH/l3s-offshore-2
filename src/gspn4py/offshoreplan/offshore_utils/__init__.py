@@ -13,7 +13,8 @@ from .WeatherAccess import (get_weather_data,
                             generate_markoff,
                             get_duration_OWT_naive,
                             get_prob,
-                            get_probability_for_operations_naive
+                            get_probability_for_operations_naive,
+                            get_operation_duration_markov
                             )
 
 __all__ = [
@@ -31,5 +32,6 @@ __all__ = [
     "generate_markoff",
     "get_duration_OWT_naive",
     "get_prob",
-    "get_probability_for_operations_naive"
+    "get_probability_for_operations_naive",
+    "get_operation_duration_markov"
 ]
