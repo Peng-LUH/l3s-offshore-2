@@ -6,6 +6,7 @@ from .options import GlobalOptions, set_options
 # from .initializer import DynamicsInitializer
 from .base_sim import BaseSimulator
 from .time_sim import TimedSimulator
+from .offshore_sim import OffshoreSimulator
 
 __all__ = [
     'GlobalOptions',
@@ -15,6 +16,6 @@ __all__ = [
     # 'DynamicsInitializer',
     'BaseSimulator',
     'TimedSimulator',
-    # 'SimulationEngine',
+    'OffshoreSimulator',
     # 'SimulationState'
 ]

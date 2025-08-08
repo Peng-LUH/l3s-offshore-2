@@ -25,13 +25,16 @@ from pm4py import Marking
 class BaseSimulator(object):
     def __init__(self, base_petri_net: BasePetriNet, properties:None):
         self._template_net = deepcopy(base_petri_net)
-        self.__properties = dict() if properties is not None else properties
+        self.__properties = properties if properties is not None else dict()
         self.reset()
         
     def __get_properties(self):
         return self.__properties
     
-    properties = property(__get_properties)
+    def __set_properties(self, key, value):
+        self.__properties[key] = value 
+    
+    properties = property(__get_properties, __set_properties)
     
     def reset(self):
         '''
@@ -40,12 +43,38 @@ class BaseSimulator(object):
         self.net = deepcopy(self._template_net)
         self.env = simpy.Environment()
     
-    @staticmethod
-    def _random_pop_n(s: set, n: int):
+    def _sample_enabled_transition(self, enabled_ts: set, n: int):
+        
+        enabled_prior_ts = set()
+        # get the set of prior enabled transitions
+        if len(set(self.net.get_list_of_priorities())) > 1:
+            prior = min(set(self.net.get_list_of_priorities()))
+            enabled_prior_ts = set()
+            for ts in enabled_ts:
+                if ts.priority == prior:
+                    enabled_prior_ts.add(ts)
+        
+        # Convert to a tuple (or list) for sampling
+        if enabled_prior_ts:
+            # sample from prior ts if available
+            sampled = random.sample(tuple(enabled_prior_ts), n)
+        else:
+            # sample from rest
+            sampled = random.sample(tuple(enabled_ts), n)
+        
+        # remove elem from the set
+        for elem in sampled:
+            enabled_ts.remove(elem)
+            
+        return sampled
+            
+    
+    def _random_pop_n(self, s: set, n: int):
+        
         if n > len(s):
             raise ValueError("Cannot pop more elements than are in the set")
         
-        # Convert to a tuple (or list) for sampling
+        
         sampled = random.sample(tuple(s), n)
         
         # remove elem from the set

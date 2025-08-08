@@ -21,7 +21,9 @@ from gspn4py.utils import import_pndf_from_json
 # import logic
 from .logic import (
     get_expected_operation_duration,
-    get_schedule_start_from_current
+    calc_opt_install_cycle_single_vessel,
+    convert_sim_results_to_response,
+    calc_opt_schedule_single_vessel_to_horizon
 )
 
 
@@ -32,15 +34,18 @@ ns_offshore_plan = Namespace("Offshore Plan", validate=True)
 from .dto import (dto_request_job_duration,
                   dto_request_opt_schedule_immediate,
                   dto_request_opt_schedule_horizon,
-                  dto_response_opt_schedule
+                #   dto_response_opt_schedule,
+                  dto_request_offshore_scenario,
+                  dto_response_offshore_plan
                 )
 
 ## register dto to Namespace
 ns_offshore_plan.models[dto_request_job_duration.name] = dto_request_job_duration
 ns_offshore_plan.models[dto_request_opt_schedule_immediate.name] = dto_request_opt_schedule_immediate
 ns_offshore_plan.models[dto_request_opt_schedule_horizon.name] = dto_request_opt_schedule_horizon
-ns_offshore_plan.models[dto_response_opt_schedule.name] = dto_response_opt_schedule
-
+# ns_offshore_plan.models[dto_response_opt_schedule.name] = dto_response_opt_schedule
+ns_offshore_plan.models[dto_request_offshore_scenario.name] = dto_request_offshore_scenario
+ns_offshore_plan.models[dto_response_offshore_plan.name] = dto_response_offshore_plan
 
 
 
@@ -72,36 +77,87 @@ class CalcOperationDuration(Resource):
         json_str = json.dumps(expected_operation_duration.tolist())
 
         return {"results": json_str}, 200
-        
 
-@ns_offshore_plan.route('/calc-opt-schdule-immediate-from-current')
-@ns_offshore_plan.expect(dto_request_opt_schedule_immediate)
-class CalcOptScheduleFromCurrent(Resource):
+
+        
+@ns_offshore_plan.route('/calc-opt-install-cycle-single-vessel')
+@ns_offshore_plan.expect(dto_request_offshore_scenario)
+# @ns_offshore_plan.marshal_list_with(dto_response_offshore_plan)
+class CalcOptScheduleSingleVesselSingleInstallCycle(Resource):
     def post(self):
-        '''
-        Calculate optimal schedule immediate from given date
-        '''
-        data = request.json
+        """
+        calculate the optimal schedule for single vessel in single installtion cycle
+        """
         
-        current_date = data["current_date"]
+        scenario = request.get_json(force=True, silent=False)
         
-        opt_schedule = get_schedule_start_from_current(current_date=current_date)
+        sim_results = calc_opt_install_cycle_single_vessel(scenario=scenario)
         
+        results = convert_sim_results_to_response(sim_results)
         
-        # current_schedule = get_opt_schedule_start_from_current()
+        if results is None:
+            results = {
+                "planned_operationsId": [[-1], [-1]],
+                "planned_operationsStart": [[-1], [-1]],
+                "planned_operationsEnd": [[-1], [-1]],
+                "planned_restockOperations": [-1]
+            }
         
-        # pprint(opt_schedule["firing_sequence"])
-        
-        return {"results": opt_schedule["firing_sequence"]}, 200
+        return results, 200
 
 
-@ns_offshore_plan.route('/calc-opt-schedule-in-horizon')
-@ns_offshore_plan.expect(dto_request_opt_schedule_horizon)
-class CalcOptScheduleInHorizon(Resource):
+@ns_offshore_plan.route('/calc-opt-schedule-single-vessel-to-horizon')
+@ns_offshore_plan.expect(dto_request_offshore_scenario)
+class CalcOptScheduleSingleVesselToHorizon(Resource):
     def post(self):
         '''
         Calculate optimal schedule starting from given date with defined horizon.
         '''
-        data = request.json
+        scenario = request.get_json(force=True, silent=False)
         
-        return {"result": data}, 200
+        sim_results = calc_opt_schedule_single_vessel_to_horizon(scenario=scenario)
+        
+        results = convert_sim_results_to_response(sim_results)
+        
+        if results is None:
+            results = {
+                "planned_operationsId": [[-1], [-1]],
+                "planned_operationsStart": [[-1], [-1]],
+                "planned_operationsEnd": [[-1], [-1]],
+                "planned_restockOperations": [-1]
+            }
+        
+        return results, 200
+    
+    
+
+
+
+# @ns_offshore_plan.route('/calc-opt-schedule-single-vessel-from-current')
+# @ns_offshore_plan.expect(dto_request_offshore_scenario)
+# # @ns_offshore_plan.marshal_list_with(dto_response_offshore_plan)
+# class CalcOptScheduleFromCurrent(Resource):
+#     def post(self):
+#         '''
+#         Calculate optimal schedule immediate from given date
+#         '''
+#         data = request.json
+        
+#         # current_date = data["current_date"]
+        
+#         # opt_schedule = get_schedule_start_from_current(current_date=current_date)
+        
+        
+#         # current_schedule = get_opt_schedule_start_from_current()
+        
+#         # pprint(opt_schedule["firing_sequence"])
+#         # print(data)
+        
+#         results = {
+#             "planned_operationsId": [[-1], [-1]],
+#             "planned_operationsStart": [[-1], [-1]],
+#             "planned_operationsEnd": [[-1], [-1]],
+#             "planned_restockOperations": [-1]
+#         }
+        
+#         return results, 200

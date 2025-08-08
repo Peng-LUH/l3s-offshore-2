@@ -67,6 +67,14 @@ class BasePetriNet(PetriNet):
         #!SECTION
         
         #SECTION - Place::PublicMethods
+        def set_tokens(self, n:int, created_by:str, created_at:int, type:str):
+            # calculate how many tokens needs to be added
+            num_toks_to_add = n - self.num_of_tokens
+            for _ in range(num_toks_to_add):
+                tok = BasePetriNet.Token(created=(created_by, created_at), properties={"type": type})
+                self.tokens.add(tok)
+            
+        
         def add_tokens(self, tokens:Set['BasePetriNet.Token']):
             '''
             add a set of tokens to place
@@ -312,6 +320,7 @@ class BasePetriNet(PetriNet):
         self._locked = False
         self._resources = {}
         self._name_space = set()
+        self._token_pool = set()
 
         # self.current_time = 0.0
         # self._inhibitor_arcs = defaultdict(list)
@@ -408,11 +417,18 @@ class BasePetriNet(PetriNet):
     
     def __set_resources(self, resources:dict):
         self._resources = resources
+        
+    def __get_token_pool(self):
+        return self._token_pool
+    
+    def __set_token_pool(self, tok:'BasePetriNet.Token'):
+        self._token_pool.add(tok)
     
     initial_marking = property(__get_initial_marking, __set_intial_marking)
     final_marking = property(__get_final_marking, __set_final_marking)
     locked = property(__get_locked, __set_locked)
     resources = property(__get_resources, __set_resources)
+    token_pool = property(__get_token_pool, __set_token_pool)
     #!SECTION
     
     
@@ -784,10 +800,20 @@ class BasePetriNet(PetriNet):
         '''
         Source: GpenSIM/Get-Functions/get_all_tokens.m
         '''
-        
-        pass
+        toks = []
+        for p in self.places:
+            if p.num_of_tokens > 0:
+                for t in p.tokens:
+                    toks.append(t)
+        return toks
     
-    
+    def get_tokens_by_property(self, property_name:str, property_value):
+        tokens = []
+        for tok in self.get_all_tokens():
+            if tok.properties[property_name] == property_value:
+                tokens.append(tok)
+
+        return tokens
     # def get_color(self, place_id, token_id):
     #     '''
     #     get the color of the token by tokenID
@@ -838,13 +864,25 @@ class BasePetriNet(PetriNet):
             return obj
         
         return None
-        
     
-    def get_place(self):
+    def get_arc(self, source_name:str, target_name:str) -> Optional['BasePetriNet.Arc']:
+        """
+        
+        """
+        for a in self.arcs:
+            if a.source.name == source_name and a.target.name == target_name:
+                # print(a)
+                return a
+        
+        return None
+    
+    def get_place(self, place_name:str) -> 'BasePetriNet.Place':
         '''
         Source: GpenSIM/Get-Functions/get_place.m
         '''
-        pass
+        for p in self.places:
+            if p.name == place_name:
+                return p
     
     
     def get_priority_by_transition_name(self, ts_name:str):
@@ -977,6 +1015,7 @@ class BasePetriNet(PetriNet):
             name_of_places.add(p.name)
         return name_of_places
     
+    
     def get_system_resource_names(self):
         '''
         get the name of system resources
@@ -1039,6 +1078,16 @@ class BasePetriNet(PetriNet):
                 raise ValueError(f"Place '{place_name}' not found")
             self._initial_marking[place] = tokens
 
+    
+    def set_weight_to_arc(self, source_name:str, target_name:str, weight:int=1) -> None:
+        """Set weight to an arc"""
+        
+        for arc in self.arcs:
+            if arc.source.name == source_name and arc.target.name == target_name:
+                arc.weight = weight
+        
+        
+    
     #ANCHOR - set_initial_dynamics
     # def set_initial_dynamics(self, initial_dynamics: Dict[str, Any]):
     #     """Initialize markings, firing times, priorities, and resources."""

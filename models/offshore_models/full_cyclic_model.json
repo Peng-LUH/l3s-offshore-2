@@ -4,7 +4,7 @@
         {
             "name": "P_BP",
             "label": "BasePort",
-            "tokens": 1
+            "tokens": 0
         },
         {
             "name": "P_SF",
@@ -39,7 +39,7 @@
         {
             "name": "P_IV",
             "label": "AvailableInstallationVessel",
-            "tokens": 1
+            "tokens": 0
         },
         {
             "name": "P_OWF",
@@ -106,7 +106,7 @@
                 "wind_limit": 14.0,
                 "wave_limit": 1.8
             },
-            "priority": 0,
+            "priority": 1,
             "duration": 2
         },
         {

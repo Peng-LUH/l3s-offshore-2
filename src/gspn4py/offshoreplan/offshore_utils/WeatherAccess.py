@@ -12,27 +12,36 @@ def get_operation_duration_markov(current_date, job_duration, job_requirements, 
     N_Data = N + max(2 * 168, T)
     N_Data_Long = N + (2 * (N_Data - N))
     
-    currentDate = parser.parse(current_date)
-    
+    # currentDate = parser.parse(current_date)
+    currentDate = current_date
     w_wind, w_waves = get_weather_data(currentDate.year,
                                      currentDate.month, currentDate.day,
                                      currentDate.hour, N_Data_Long)
+    # print("get wind waves okay")
     
     waves, wind = get_forecast(w_wind, w_waves)
+    # print("get forcast okay")
     
     wind_r = np.column_stack([wind[:, 1] - 0.01, wind[:, 1], wind[:, 1] + 0.01])
     waves_r = np.column_stack([waves[:, 1] - 0.01, waves[:, 1], waves[:, 1] + 0.01])
+    # print("get wind wave stack okay")
 
     #get_duration_owt_markoff_single(weather[i:], jobs_duration, jobs_requirements)
     operation_duration = get_duration_owt_markoff(np.column_stack([wind_r, waves_r]), 
                                                          N, 
                                                          job_duration,
                                                          job_requirements)
-    return operation_duration
+    return int(operation_duration)
+
+
 
 def get_weather_data(start_year, start_month, start_day, start_hour, N_Data):
     # Load weather data from the hard disk
-    weatherdata = np.load(f'{Path.cwd()}/WEATHER_DATA/weatherdata.npy')
+    # print(Path.cwd().parent)
+    if os.path.isfile(f'{Path.cwd()}/WEATHER_DATA/weatherdata.npy'):
+        weatherdata = np.load(f'{Path.cwd()}/WEATHER_DATA/weatherdata.npy')
+    elif os.path.isfile(f'{Path.cwd().parent}/WEATHER_DATA/weatherdata.npy'):
+        weatherdata = np.load(f'{Path.cwd().parent}/WEATHER_DATA/weatherdata.npy')
 
     # Get the index for the specified start date and time
     idx1 = date_to_weather_index(start_year, start_month, start_day, start_hour)
@@ -143,7 +152,7 @@ def get_duration_owt_markoff_single(weather, jobs_duration, jobs_requirements):
 
         if zk[-1] > 0.9973:  # 3 sigma
             break
-        print("")
+        # print("")
 
     if zk[-1] < 0.9973:
         print(f"Not enough forecast time to estimate sufficiently. Only {zk[-1]} of 1")

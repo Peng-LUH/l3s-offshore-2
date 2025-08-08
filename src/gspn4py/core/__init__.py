@@ -13,6 +13,7 @@ from .models import (
 from .simulator import (
     BaseSimulator,
     TimedSimulator,
+    OffshoreSimulator,
     # SimulationEngine,
     # SimulationState,
     # DynamicsInitializer,
@@ -35,6 +36,7 @@ __all__ = [
     # 'SimulationState',
     'BaseSimulator',
     'TimedSimulator',
+    'OffshoreSimulator',
     'DynamicsInitializer',
     'GlobalOptions'
 ]

@@ -10,7 +10,8 @@ from .core import (
     # DynamicsInitializer,
     # PetriNetBuilder
     BaseSimulator,
-    TimedSimulator
+    TimedSimulator,
+    OffshoreSimulator
 )
 
 # Utility components
