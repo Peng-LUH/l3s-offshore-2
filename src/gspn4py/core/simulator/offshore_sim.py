@@ -503,7 +503,7 @@ class OffshoreSimulator(TimedSimulator):
         vessel_storage = self.properties["state_vessel_currentStorage"][0]
         
         sim_results = None
-        if self.properties["stop_at"] is None:
+        if self.properties.get("stop_at") == None:
             self.properties["stop_at"] = 8760 # one year 365*24
         
         
