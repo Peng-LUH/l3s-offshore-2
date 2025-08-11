@@ -437,7 +437,21 @@ class OffshoreSimulator(TimedSimulator):
         return cost
         
     
-    
+    def get_expected_duration_of_installation_cycle(self, n_load:int, n_build:int) -> int:
+        """
+        get the expected duration of installation cycle
+        """
+        # get the expected duration of each transition
+        expected_duration = 0
+        for t in self.net.transitions:
+            if t.label == "LoadingOWT":
+                expected_duration += t.duration * n_load
+            elif t.label in ["Reposition", "JackUp", "Construction", "JackDown"]:
+                expected_duration += t.duration * n_build
+            elif t.label in ["SailingForth", "SailingBack"]:
+                expected_duration += t.duration
+                        
+        return expected_duration
     
     
     def calc_opt_installation_cycle_multi_vessels_from_current(self):
@@ -500,6 +514,13 @@ class OffshoreSimulator(TimedSimulator):
         cost = 0
         for n_owts in list(i+1 for i in range(vessel_capacity - vessel_storage)):
             for to_do in list(i+1 for i in range(n_owts + vessel_storage)):
+                
+                # check if the remining time is enough for the installation cycle
+                expected_duration = self.get_expected_duration_of_installation_cycle(n_load=n_owts, n_build=to_do)
+                if expected_duration > self.properties["stop_at"]:
+                    print(f"Expected duration {expected_duration} is larger than stop_at {self.properties['stop_at']}.")
+                    continue
+                
                 print(f"\n\n*******Load: {n_owts}, and Build: {to_do}*******\n\n")
                 # update the number of owts to be loaded
                 self.properties["num_owts_to_load"] = n_owts
@@ -516,6 +537,14 @@ class OffshoreSimulator(TimedSimulator):
                 # print(f"Cost of the schedule: {plan_cost}")
             # print(f"********\nProcess stoped at: {r['stop_at']}\n********")
             # # update the simulation result if a shorter schedule is found
+            
+            # check if the estimated duration is valid
+            if r["end_at"] > self.properties["stop_at"]:
+                print(f"Estimated duration {r['end_at']} is larger than stop_at {self.properties['stop_at']}.")
+                continue
+            
+            
+            print(f"Estimated duration {r['end_at']} is smaller than stop_at {self.properties['stop_at']}.")
             if  cost < plan_cost:
                 cost = plan_cost
                 sim_results = {

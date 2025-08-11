@@ -43,6 +43,12 @@ def convert_sim_results_to_response(sim_results:dict):
                 
                 merged.append((op_name, op_duration, op_delay, op_start, op_end))
                 i += 4  # Skip the merged ones
+        elif ops[i][0] == "LoadingOWT":
+            n = int(ops[i][1]/12)
+            for j in range(n):
+                merged.append((ops[i][0], 12, 0, 12*n*j, 12*n*(j+1)))
+            
+            i += 1
         else:
             merged.append(ops[i])
             i += 1
