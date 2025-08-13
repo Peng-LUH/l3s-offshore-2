@@ -47,7 +47,7 @@ dto_request_offshore_scenario = Model("RequestOffshoreScenario",{
     "pn_pruningFlag": fields.Integer(required=True, default=2),
     "pn_tau": fields.Float(required=True, default=0.01),
     "pn_searchSpace": fields.Integer(required=True, default=0),
-    "scenario_simulationStartDate": fields.String(required=True, default="15-Jun-2000"),
+    "scenario_simulationStartDate": fields.String(required=True, default="15-Jun-2000-00", description="Start of simulation."),
     "scenario_targetPlanTime": fields.Integer(required=True, default=999999),
     "scenario_OWTsToBuild": fields.Integer(required=True, default=50),
     "operation_name": fields.List(fields.String, required=True, default=[ "Install Tower", "Install Nacelle", "Install Blade 1", "Install Blade 2", "Install Blade 3", "Install Hub", "Move", "Reposition in Field", "Jack-up", "Jack-Down", "Load OWT Components" ]),
@@ -111,4 +111,26 @@ dto_response_offshore_plan = Model("ResponseOffshorePlan", {
     "planned_operationsStart": fields.List(fields.List(fields.Integer), default= [[-1], [-1]]),
     "planned_operationsEnd": fields.List(fields.List(fields.Integer), default=[[-1], [-1]]),
     "planned_restockOperations": fields.List(fields.Integer, default=[-1])
+})
+
+
+dto_request_display_schedule = Model("RequestDisplaySchedule", {
+    "planned_operationsId":    fields.List(fields.List(fields.Integer),
+                                           required=True,
+                                           default=[[-1], [3, 3, 3, 3, 2, 0, 0, 0, 0, 1, 3, 3, 3, 3, 2, 0, 0, 0, 0, 1]],
+                                           description="List of lists of operation IDs or [-1]"),
+    "planned_operationsStart": fields.List(fields.List(fields.Integer), 
+                                           required=True,
+                                           default=[[-1], [0, 12, 24, 36, 48, 52, 72, 92, 112, 132, 136, 148, 160, 172, 184, 188, 312, 332, 352, 372]], 
+                                           description="List of lists of start times or [-1]"),
+    "planned_operationsEnd":   fields.List(fields.List(fields.Integer), 
+                                           required=True,
+                                           default=[[-1], [12, 24, 36, 48, 52, 72, 92, 112, 132, 136, 148, 160, 172, 184, 188, 312, 332, 352, 372, 376]],
+                                           description="List of lists of stop times or [-1]"),
+    "planned_restockOperations": fields.List(fields.Integer,
+                                             required=False,
+                                             default=[-1],
+                                             description="List (or list of lists) of restock marks or [-1]"),
+    "title": fields.String(required=False, default="Single Vessel Schedule", description="Plot title"),
+    "xlabel": fields.String(required=False, default="Time", description="X axis label"),
 })

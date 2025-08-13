@@ -36,7 +36,8 @@ from .dto import (dto_request_job_duration,
                   dto_request_opt_schedule_horizon,
                 #   dto_response_opt_schedule,
                   dto_request_offshore_scenario,
-                  dto_response_offshore_plan
+                  dto_response_offshore_plan,
+                  dto_request_display_schedule
                 )
 
 ## register dto to Namespace
@@ -46,7 +47,7 @@ ns_offshore_plan.models[dto_request_opt_schedule_horizon.name] = dto_request_opt
 # ns_offshore_plan.models[dto_response_opt_schedule.name] = dto_response_opt_schedule
 ns_offshore_plan.models[dto_request_offshore_scenario.name] = dto_request_offshore_scenario
 ns_offshore_plan.models[dto_response_offshore_plan.name] = dto_response_offshore_plan
-
+ns_offshore_plan.models[dto_request_display_schedule.name] = dto_request_display_schedule
 
 
 @ns_offshore_plan.route('/get-tpn-cyclic-model')
@@ -131,7 +132,61 @@ class CalcOptScheduleSingleVesselToHorizon(Resource):
     
     
 
-
+@ns_offshore_plan.route('/display-single-vessel-schedule')
+class DiplaySIngleVesselSchedule(Resource):
+    @ns_offshore_plan.expect(dto_request_display_schedule)
+    @ns_offshore_plan.produces(['application/pdf'])
+    def post(self):
+        """
+        Display the schedule for single vessel.
+        """
+        # This endpoint is for demonstration purposes, it can be used to visualize the schedule.
+        # In a real application, you might want to return a more complex visualization or data structure.
+        
+        # For now, we will return a simple message.
+        
+        payload = request.get_json(force=True)
+        
+        title   = payload.get("title", "Operation Schedule")
+        xlabel  = payload.get("xlabel", "Time")
+        
+        mapping_operationId = {
+                                "Loading OWT": 3,   # load
+                                "Sailing Forth": 2, # to_site
+                                "Sailing Back": 1,  # to_port
+                                "Install": 0,
+                            }
+        
+        try:
+            from gspn4py.utils.viewer import make_schedule_figure
+            import io
+            import matplotlib
+            matplotlib.use("Agg") 
+            import matplotlib.pyplot as plt
+            
+            fig = make_schedule_figure(
+                planned=payload,
+                mapping_operationId=mapping_operationId,
+                title=title,
+                xlabel=xlabel,
+            )
+            
+            # write to in-memory PDF
+            buf = io.BytesIO()
+            fig.savefig(buf, format="pdf", bbox_inches="tight")
+            plt.close(fig)
+            buf.seek(0)
+            return send_file(
+                buf,
+                mimetype="application/pdf",
+                as_attachment=True,
+                download_name="schedule.pdf",
+            )
+        except Exception as e:
+            # You can customize error shape as needed
+            ns_offshore_plan.abort(400, f"Failed to render schedule: {e}")
+            
+        # return {"message": "This endpoint will display the schedule for single vessel."}, HTTPStatus.OK
 
 # @ns_offshore_plan.route('/calc-opt-schedule-single-vessel-from-current')
 # @ns_offshore_plan.expect(dto_request_offshore_scenario)

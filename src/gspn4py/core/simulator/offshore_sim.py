@@ -474,20 +474,27 @@ class OffshoreSimulator(TimedSimulator):
         }
         
         while horizon > 0:
-            
+            print(f"\nCurrent date: {self.properties['state_currentDate']}")
             # calculate the optimal installation cycle start from currentDate
             sim_results = self.calc_opt_install_cycle_single_vessel_single()
+            print(f"\n**Simulation results:")
+            print(sim_results)
             
+            print(f"End at: {sim_results['end_at']}")
             # update results
             results["owts_finished"] += sim_results["owts_finished"]
             results["plan_cost"] += sim_results["plan_cost"]
-            results["end_at"] += sim_results["end_at"]
-            results["plan"].extend(sim_results["plan"])
+            
+            if sim_results.get("end_at") is not None:
+                results["end_at"] += sim_results["end_at"]
+            
+            if sim_results.get("plan") is not None:
+                results["plan"].extend(sim_results["plan"])
             
             
             # update the current date for next installation cycle
             current_date = parser.parse(self.properties["state_currentDate"]) + timedelta(hours=sim_results["end_at"])
-            self.properties["state_currentDate"] = current_date.strftime("%d-%b-%Y")
+            self.properties["state_currentDate"] = current_date.strftime("%d-%b-%Y-%H")
             
             horizon = horizon - sim_results["end_at"]
             
@@ -705,7 +712,7 @@ class OffshoreSimulator(TimedSimulator):
                     # print(f"current_date_year: {current_date.year}")
                     
                     if transition_to_fire.name == "t_Load":
-                        weight = self.net.get_arc(source_name="P_BP", target_name="t_Load").weight
+                        weight = self.net.get_arc(source_name="P_BP",target_name="t_Load").weight
                         job_duration = transition_to_fire.duration * weight
                     else:
                         job_duration = transition_to_fire.duration
