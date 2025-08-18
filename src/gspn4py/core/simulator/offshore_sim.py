@@ -496,6 +496,11 @@ class OffshoreSimulator(TimedSimulator):
             current_date = parser.parse(self.properties["state_currentDate"]) + timedelta(hours=sim_results["end_at"])
             self.properties["state_currentDate"] = current_date.strftime("%d-%b-%Y-%H")
             
+            
+            self.properties["state_vessel_location"][0] = 0 # vessel is back to base port
+            self.properties["state_vessel_currentStorage"][0] = 0 # vessel is empty
+            
+            
             horizon = horizon - sim_results["end_at"]
             
             
@@ -508,40 +513,93 @@ class OffshoreSimulator(TimedSimulator):
         # assign vessel capacity to token
         vessel_capacity = self.properties["vessel_capacity"][0]
         vessel_storage = self.properties["state_vessel_currentStorage"][0]
+        vessel_location = self.properties["state_vessel_location"][0]
         
         sim_results = None
         if self.properties.get("stop_at") == None:
             self.properties["stop_at"] = 8760 # one year 365*24
         
         
-        # print(f"Vessel Capacity: {vessel_capacity}")
-        # print(f"Vessel Current Storage: {vessel_storage}")
+        # evaluate possible combinations
+        if vessel_location == 0:
+            if vessel_capacity - vessel_storage > 0:
+                max_to_load = vessel_capacity - vessel_storage
+                combinations = [(x, y) for x in range(1, max_to_load+1) for y in range(1, x + vessel_storage+1)]
+            else:
+                combinations = [(0, y) for y in range(1, vessel_storage + 1)]
+        if vessel_location == 1:
+            if vessel_storage > 0:
+                combinations = [(0, y) for y in range(1, vessel_storage + 1)]
+            else:
+                combinations = [(0, 0)] # at least one OWT needs to be built
         
         
-        cost = 0
-        for n_owts in list(i+1 for i in range(vessel_capacity - vessel_storage)):
-            for to_do in list(i+1 for i in range(n_owts + vessel_storage)):
+        cost = -10000
+        
+        # if vessel_storage - vessel_capacity == 0:
+        #     for to_do in list(i+1 for i in range(vessel_storage)):
+        #         # check if the remining time is enough for the installation cycle
+        #         expected_duration = self.get_expected_duration_of_installation_cycle(n_load=0, n_build=to_do)
+        #         if expected_duration > self.properties["stop_at"]:
+        #             print(f"Expected duration {expected_duration} is larger than stop_at {self.properties['stop_at']}.")
+        #             continue
                 
-                # check if the remining time is enough for the installation cycle
-                expected_duration = self.get_expected_duration_of_installation_cycle(n_load=n_owts, n_build=to_do)
-                if expected_duration > self.properties["stop_at"]:
-                    print(f"Expected duration {expected_duration} is larger than stop_at {self.properties['stop_at']}.")
-                    continue
-                
-                print(f"\n\n*******Load: {n_owts}, and Build: {to_do}*******\n\n")
-                # update the number of owts to be loaded
-                self.properties["num_owts_to_load"] = n_owts
-                self.properties["num_to_do"] = to_do
+        #         print(f"\n\n*******Load: {0}, and Build: {to_do}*******\n\n")
+        #         # update the number of owts to be loaded
+        #         self.properties["num_owts_to_load"] = 0
+        #         self.properties["num_to_do"] = to_do
 
-                self.run_installation_cycle()
+        #         self.run_installation_cycle()
                 
-                r = self.get_sim_results()
+        #         r = self.get_sim_results()
 
-                # pprint(f"firing_sequences: {self.firing_sequences}")
-                # pprint(f"Simulation Result: {r}")
+        #         # pprint(f"firing_sequences: {self.firing_sequences}")
+        #         # pprint(f"Simulation Result: {r}")
                 
-                plan_cost = self.evaluate_simulation_results()
-                # print(f"Cost of the schedule: {plan_cost}")
+        #         plan_cost = self.evaluate_simulation_results()
+        #         # print(f"Cost of the schedule: {plan_cost}")
+        #         # print(f"********\nProcess stoped at: {r['stop_at']}\n********")
+        #         # # update the simulation result if a shorter schedule is found
+                
+        #         # check if the estimated duration is valid
+        #         if r["end_at"] > self.properties["stop_at"]:
+        #             print(f"Estimated duration {r['end_at']} is larger than stop_at {self.properties['stop_at']}.")
+        #             continue
+                
+                
+        #         print(f"Estimated duration {r['end_at']} is smaller than stop_at {self.properties['stop_at']}.")
+        #         if  cost < plan_cost:
+        #             cost = plan_cost
+        #             sim_results = {
+        #                 "owts_finished": to_do,
+        #                 "plan_cost": cost,
+        #                 "end_at": r["end_at"],
+        #                 "plan": self.firing_sequences
+        #             }
+        #     return sim_results
+        # else:
+        for n_owts, to_do in combinations:
+                
+            # check if the remining time is enough for the installation cycle
+            expected_duration = self.get_expected_duration_of_installation_cycle(n_load=n_owts, n_build=to_do)
+            if expected_duration > self.properties["stop_at"]:
+                print(f"Expected duration {expected_duration} is larger than stop_at {self.properties['stop_at']}.")
+                continue
+            
+            print(f"\n\n*******Load: {n_owts}, and Build: {to_do}*******\n\n")
+            # update the number of owts to be loaded
+            self.properties["num_owts_to_load"] = n_owts
+            self.properties["num_to_do"] = to_do
+
+            self.run_installation_cycle()
+            
+            r = self.get_sim_results()
+
+            # pprint(f"firing_sequences: {self.firing_sequences}")
+            # pprint(f"Simulation Result: {r}")
+            
+            plan_cost = self.evaluate_simulation_results()
+            # print(f"Cost of the schedule: {plan_cost}")
             # print(f"********\nProcess stoped at: {r['stop_at']}\n********")
             # # update the simulation result if a shorter schedule is found
             
@@ -560,7 +618,6 @@ class OffshoreSimulator(TimedSimulator):
                     "end_at": r["end_at"],
                     "plan": self.firing_sequences
                 }
-                
         return sim_results
 
         
@@ -609,13 +666,40 @@ class OffshoreSimulator(TimedSimulator):
                                                         )
         
         
-        # update number of vessels in P_IV
-        num_installation_vessel = 1#self.properties["vessel_numInstallationVessels"]
-        self.net.get_place(place_name="P_IV").set_tokens(n=num_installation_vessel,
+        # update location of installation vessel
+        vessel_location = self.properties["state_vessel_location"][0]
+        num_installation_vessel = 1
+        current_storage = self.properties["state_vessel_currentStorage"][0]
+        vessel_capacity = self.properties["vessel_capacity"][0]
+        if vessel_location == 0:
+            # vessel is in base port
+            print("Vessel is onshore.")
+            if current_storage >= vessel_capacity:
+                # if the vessel is fully loaded, then start direct from sailing forth
+                self.net.get_place(place_name="P_SF").set_tokens(n=num_installation_vessel,
                                                          created_by='init',
                                                          created_at=self.env.now,
                                                          type="Vessel")
-        
+            else: 
+                self.net.get_place(place_name="P_IV").set_tokens(n=num_installation_vessel,
+                                                         created_by='init',
+                                                         created_at=self.env.now,
+                                                         type="Vessel")
+        elif vessel_location == 1:
+            # vessel if in offshore
+            print("Vessel is offshore.")
+            if current_storage <= 0:
+                # if the vessel is empty, then start direct from sailing back
+                self.net.get_place(place_name="P_SB").set_tokens(n=num_installation_vessel,
+                                                         created_by='init',
+                                                         created_at=self.env.now,
+                                                         type="Vessel")
+            else:
+                # if the vessel is not empty, then start direct from reposition
+                self.net.get_place(place_name="P_R").set_tokens(n=num_installation_vessel,
+                                                         created_by='init',
+                                                         created_at=self.env.now,
+                                                         type="Vessel")
         
         # assign vessel capacity
         vessel_capacity = self.properties["vessel_capacity"]
@@ -635,7 +719,9 @@ class OffshoreSimulator(TimedSimulator):
         
         # set initial marking
         self.net.initial_marking = self.net.get_current_marking_obj()    
-    
+        print(f"Initial marking: {self.net.initial_marking}")
+        
+        
     
         
     def simulate_installation_cycle(self):
@@ -744,7 +830,7 @@ class OffshoreSimulator(TimedSimulator):
         
                     dt = int((ic_startdate - scenario_startdate).total_seconds() / 3600)
                     op_start = dt + self.env.now
-                    op_end = op_start + estimated_duration
+                    op_end = op_start + estimated_duration - 1
                     
                     self.firing_sequences.append((op_name,      # op_name 
                                                   op_duration,  # op_duration
