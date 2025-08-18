@@ -477,8 +477,15 @@ class OffshoreSimulator(TimedSimulator):
             print(f"\nCurrent date: {self.properties['state_currentDate']}")
             # calculate the optimal installation cycle start from currentDate
             sim_results = self.calc_opt_install_cycle_single_vessel_single()
-            print(f"\n**Simulation results:")
-            print(sim_results)
+            if sim_results is None:
+                print("No valid installation cycle found. Stopping simulation.")
+                results = {
+                    "owts_finished": 0,
+                    "plan_cost": 0,
+                    "end_at": 0,
+                    "plan": []
+                }
+                break
             
             print(f"End at: {sim_results['end_at']}")
             # update results
@@ -534,8 +541,13 @@ class OffshoreSimulator(TimedSimulator):
                 combinations = [(0, 0)] # at least one OWT needs to be built
         
         
-        cost = -10000
-        
+        cost = -1000000 # initialize cost to a large negative number
+        # sim_results = {
+        #             "owts_finished": 0,
+        #             "plan_cost": cost,
+        #             "end_at": self.env.now,
+        #             "plan": []
+        #         }
         # if vessel_storage - vessel_capacity == 0:
         #     for to_do in list(i+1 for i in range(vessel_storage)):
         #         # check if the remining time is enough for the installation cycle
