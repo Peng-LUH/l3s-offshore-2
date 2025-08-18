@@ -1,0 +1,195 @@
+{
+  "sim_scenario_decisionMode": 0,
+  "optim_pathGUROBI": "C:/gurobi1201/win64/matlab",
+  "optim_maxOptimTime": 43200,
+  "optim_useHistoricSolutions": 1,
+  "optim_useHistoricTillIteration": 9999,
+  "optim_useInitialPoint": 1,
+  "optim_useForecasts": 1,
+  "optim_applyWithRealWeatherData": 1,
+  "optim_stepWidth": 168,
+  "optim_planningHorizons": 2,
+  "alorithm_waitIfNoPlanFound": 24,
+  "alorithm_maxIterations": 9999,
+  "pn_deltaTime": 1,
+  "pn_maxWaitTime": 96,
+  "pn_fairMode": 1,
+  "pn_pruningFlag": 2,
+  "pn_tau": 0.01,
+  "pn_searchSpace": 0,
+  "scenario_simulationStartDate": "15-Jun-2000-00",
+  "scenario_targetPlanTime": 999999,
+  "scenario_OWTsToBuild": 50,
+  "operation_name": [
+    "Install Tower",
+    "Install Nacelle",
+    "Install Blade 1",
+    "Install Blade 2",
+    "Install Blade 3",
+    "Install Hub",
+    "Move",
+    "Reposition in Field",
+    "Jack-up",
+    "Jack-Down",
+    "Load OWT Components"
+  ],
+  "operation_duration": [
+    3,
+    3,
+    2,
+    2,
+    2,
+    2,
+    4,
+    1,
+    2,
+    2,
+    12
+  ],
+  "operation_wind": [
+    12,
+    12,
+    10,
+    10,
+    10,
+    12,
+    21,
+    14,
+    14,
+    14,
+    99
+  ],
+  "operation_wave": [
+    99,
+    99,
+    99,
+    99,
+    99,
+    99,
+    2.5,
+    2,
+    1.8,
+    1.8,
+    99
+  ],
+  "processChain_install": [
+    8,
+    9,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    10
+  ],
+  "processChain_move": 7,
+  "processChain_load": 11,
+  "basePort_numLoadingBays": 1,
+  "basePort_storageCapacity": 32,
+  "transport_amountPerCycle": 8,
+  "transport_cycleTime": 312,
+  "vessel_numInstallationVessels": 2,
+  "vessel_capacity": [
+    4,
+    4
+  ],
+  "cost_offshore": [
+    1800,
+    1800
+  ],
+  "cost_portOp": 1200,
+  "cost_Fuel": [
+    600,
+    600
+  ],
+  "cost_benefitForFinishingAnOWT": 130000,
+  "cost_maxBenefitForFinishingEarly": 8100,
+  "cost_storagePenalty": -10,
+  "cost_waitingPenalty": -1500,
+  "basePort_Latitude": 53.454399,
+  "basePort_Longitude": 6.838584,
+  "installationSite_Latitude": 54.5,
+  "installationSite_Longitude": 6.4,
+  "prodPortTower_Latitude": 53.865448,
+  "prodPortTower_Longitude": 8.72604,
+  "prodPortBlade_Latitude": 53.543192,
+  "prodPortBlade_Longitude": 8.567501,
+  "prodPortNacelle_Latitude": 53.543192,
+  "prodPortNacelle_Longitude": 8.567501,
+  "transport_vesselspeed": 9.5,
+  "transport_maxSpace": 2646,
+  "transport_maxWeight": 8900,
+  "transport_componentSpace": [
+    650,
+    300,
+    263
+  ],
+  "transport_componentWeight": [
+    600,
+    120,
+    500
+  ],
+  "transport_componentSetUpTime": [
+    0,
+    0,
+    0
+  ],
+  "transport_componentLoadingTime": [
+    2,
+    8,
+    10
+  ],
+  "transport_unloadFactor": 0.6,
+  "transport_route": [
+    -1
+  ],
+  "state_OWTsFinished": 0,
+  "state_currentDate": "15-Jun-2000",
+  "state_vessel_location": [
+    0,
+    0
+  ],
+  "state_vessel_currentStorage": [
+    4,
+    0
+  ],
+  "state_vessel_availabeFromDate": [
+    "15-Jun-2000",
+    "15-Jun-2000"
+  ],
+  "state_basePort_currentStorage": 20,
+  "state_basePort_totalComponentSetsDelivered": 20,
+  "state_portRestockEarliest": 312,
+  "state_currentPlans_ops": [
+    [
+      -1
+    ],
+    [
+      -1
+    ]
+  ],
+  "state_currentPlans_start": [
+    [
+      -1
+    ],
+    [
+      -1
+    ]
+  ],
+  "state_currentPlans_end": [
+    [
+      -1
+    ],
+    [
+      -1
+    ]
+  ],
+  "state_currentlyBuiltOWTs": 0,
+  "state_basePort_currentlyUsedLoadingBays": 0,
+  "state_vessel_speed": [
+    16,
+    16,
+    16
+  ]
+}

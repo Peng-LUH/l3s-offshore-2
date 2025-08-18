@@ -47,9 +47,9 @@ def convert_sim_results_to_response(sim_results:dict):
             n = int(ops[i][1]/12)
             for j in range(n):
                 if j == n-1:
-                    temp = (ops[i][0], 12, ops[i][2], ops[i][3]+12*j, ops[i][3]+12*(j+1)+ops[i][2])
+                    temp = (ops[i][0], 12, ops[i][2], ops[i][3]+12*j, ops[i][3]+12*(j+1)+ops[i][2]-1)
                 else:
-                    temp = (ops[i][0], 12, 0, ops[i][3]+12*j, ops[i][3]+12*(j+1))
+                    temp = (ops[i][0], 12, 0, ops[i][3]+12*j, ops[i][3]+12*(j+1)-1)
                     
                 merged.append(temp)
             i += 1
