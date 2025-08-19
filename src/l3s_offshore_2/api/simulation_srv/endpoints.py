@@ -21,11 +21,12 @@ from .logic import timed_sim_run
 from .dto import test_model
 
 # Robust: Hole das Projekt-Root-Verzeichnis aus der Umgebungsvariable oder gehe 2x nach oben
-PROJECT_ROOT = os.environ.get("BASE_PATH") or os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+PROJECT_ROOT = os.environ.get("BASE_PATH") or os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 MODELS_DIR = os.path.join(
     PROJECT_ROOT,
-    'datasets',
-    'Process Discovery Contest 2023_1_all',
+    'models',
+    'pnml_models',
+    'pdc_2023',
     'Models'
 )
 
