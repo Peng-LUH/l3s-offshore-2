@@ -35,62 +35,12 @@
     "Jack-Down",
     "Load OWT Components"
   ],
-  "operation_duration": [
-    3,
-    3,
-    2,
-    2,
-    2,
-    2,
-    4,
-    1,
-    2,
-    2,
-    12
-  ],
-  "operation_wind": [
-    12,
-    12,
-    10,
-    10,
-    10,
-    12,
-    21,
-    14,
-    14,
-    14,
-    99
-  ],
-  "operation_wave": [
-    99.0,
-    99.0,
-    99.0,
-    99.0,
-    99.0,
-    99.0,
-    2.5,
-    2.0,
-    1.8,
-    1.8,
-    99.0
-  ],
-  "processChain_install": [
-    8,
-    9,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    10
-  ],
-  "processChain_move": [
-    7
-  ],
-  "processChain_load": [
-    11
-  ],
+  "operation_duration": [3,3,2,2,2,2,4,1,2,2,12],
+  "operation_wind": [12,12,10,10,10,12,21,14,14,14,99],
+  "operation_wave": [99.0,99.0,99.0,99.0,99.0,99.0,2.5,2.0,1.8,1.8,99.0],
+  "processChain_install": [8,9,1,2,3,4,5,6,10],
+  "processChain_move": [7],
+  "processChain_load": [11],
   "basePort_numLoadingBays": 1,
   "basePort_storageCapacity": 32,
   "transport_amountPerCycle": 8,
@@ -123,39 +73,17 @@
   "transport_vesselspeed": 9.5,
   "transport_maxSpace": 2646,
   "transport_maxWeight": 8900,
-  "transport_componentSpace": [
-    650,
-    300,
-    263
-  ],
-  "transport_componentWeight": [
-    600,
-    120,
-    500
-  ],
-  "transport_componentSetUpTime": [
-    0,
-    0,
-    0
-  ],
-  "transport_componentLoadingTime": [
-    2,
-    8,
-    10
-  ],
+  "transport_componentSpace": [650,300,263],
+  "transport_componentWeight": [600,120,500],
+  "transport_componentSetUpTime": [0,0,0],
+  "transport_componentLoadingTime": [2,8,10],
   "transport_unloadFactor": 0.6,
   "transport_route": [],
-  "state_OWTsFinished": 36,
+  "state_OWTsFinished": 49,
   "state_currentDate": "2000-05-28T19:00:00",
-  "state_vessel_location": [
-    1
-  ],
-  "state_vessel_currentStorage": [
-    0
-  ],
-  "state_vessel_availabeFromDate": [
-    "2000-05-28T19:00:00"
-  ],
+  "state_vessel_location": [1],
+  "state_vessel_currentStorage": [0],
+  "state_vessel_availabeFromDate": ["2000-05-28T19:00:00"],
   "state_basePort_currentStorage": 16,
   "state_basePort_totalComponentSetsDelivered": 52,
   "state_portRestockEarliest": 173,

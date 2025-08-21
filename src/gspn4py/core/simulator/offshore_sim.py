@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from dateutil import parser
 
 from pprint import pprint
-
+import time
 
 class OffshoreSimulator(TimedSimulator):
     
@@ -106,7 +106,7 @@ class OffshoreSimulator(TimedSimulator):
             raise ValueError("Not a vessel")
         
         # add popped_tokens to token_pool
-        print(f"popped_tokens: {len(popped_tokens)}")
+        # print(f"popped_tokens: {len(popped_tokens)}")
         for t in popped_tokens:
             self.net.token_pool.add(t)
             
@@ -221,7 +221,7 @@ class OffshoreSimulator(TimedSimulator):
             raise ValueError("Empty transition passed in.")
             ## choose one enabled transition randomly
             
-        print(f"Transition to fire: {transition_to_fire.label}")
+        # print(f"Transition to fire: {transition_to_fire.label}")
         # token_pool = set() # place holder for tokens
         
         if transition_to_fire.name == "t_Load":
@@ -470,11 +470,19 @@ class OffshoreSimulator(TimedSimulator):
             "owts_finished": 0,
             "plan_cost": 0,
             "end_at": 0,
-            "plan": []
+            "plan": [],
+            "eplasped_time": 0
         }
         
+        owts_to_build = self.properties["scenario_OWTsToBuild"]
+        owts_built = self.properties["state_OWTsFinished"]
+        if owts_to_build - owts_built <= 0:
+            print("All OWTs are built. No need to run installation cycle.")
+            return results
+        
+        start = time.perf_counter()
         while horizon > 0:
-            print(f"\nCurrent date: {self.properties['state_currentDate']}")
+            # print(f"\nCurrent date: {self.properties['state_currentDate']}")
             # calculate the optimal installation cycle start from currentDate
             sim_results = self.calc_opt_install_cycle_single_vessel_single()
             if sim_results is None:
@@ -487,7 +495,9 @@ class OffshoreSimulator(TimedSimulator):
                 }
                 break
             
-            print(f"End at: {sim_results['end_at']}")
+            
+            
+            # print(f"End at: {sim_results['end_at']}")
             # update results
             results["owts_finished"] += sim_results["owts_finished"]
             results["plan_cost"] += sim_results["plan_cost"]
@@ -506,10 +516,12 @@ class OffshoreSimulator(TimedSimulator):
             
             self.properties["state_vessel_location"][0] = 0 # vessel is back to base port
             self.properties["state_vessel_currentStorage"][0] = 0 # vessel is empty
-            
+            self.properties["state_OWTsFinished"] = self.properties["state_OWTsFinished"] + sim_results["owts_finished"]
             
             horizon = horizon - sim_results["end_at"]
-            
+        
+        elapsed = time.perf_counter() - start
+        results["elapsed_time"] = elapsed    
             
         return results
         
@@ -540,8 +552,28 @@ class OffshoreSimulator(TimedSimulator):
             else:
                 combinations = [(0, 0)] # at least one OWT needs to be built
         
+        # if less than 4 OWTs can be build
+        owts_to_build = self.properties["scenario_OWTsToBuild"]
+        owts_built = self.properties["state_OWTsFinished"]
+        remaining_owts = owts_to_build - owts_built
         
-        cost = -1000000 # initialize cost to a large negative number
+        # print(f"Remaining OWTs to build: {remaining_owts}")
+        
+        combinations = [t for t in combinations if t[0] <= remaining_owts]
+        
+        # print(f"Combinations: {combinations}")
+        sim_results = {
+                    "owts_finished": 0,
+                    "plan_cost": -1000000,
+                    "end_at": self.env.now,
+                    "plan": [],
+                    "elapsed_time": 0
+                }
+        if remaining_owts <= 0:
+            print("All OWTs are built. No need to run installation cycle.")
+            return sim_results
+        
+        cost = sim_results["plan_cost"] # initialize cost to a large negative number
         # sim_results = {
         #             "owts_finished": 0,
         #             "plan_cost": cost,
@@ -590,6 +622,8 @@ class OffshoreSimulator(TimedSimulator):
         #             }
         #     return sim_results
         # else:
+        
+        start = time.perf_counter()
         for n_owts, to_do in combinations:
                 
             # check if the remining time is enough for the installation cycle
@@ -598,7 +632,7 @@ class OffshoreSimulator(TimedSimulator):
                 print(f"Expected duration {expected_duration} is larger than stop_at {self.properties['stop_at']}.")
                 continue
             
-            print(f"\n\n*******Load: {n_owts}, and Build: {to_do}*******\n\n")
+            # print(f"\n\n*******Load: {n_owts}, and Build: {to_do}*******\n\n")
             # update the number of owts to be loaded
             self.properties["num_owts_to_load"] = n_owts
             self.properties["num_to_do"] = to_do
@@ -617,11 +651,11 @@ class OffshoreSimulator(TimedSimulator):
             
             # check if the estimated duration is valid
             if r["end_at"] > self.properties["stop_at"]:
-                print(f"Estimated duration {r['end_at']} is larger than stop_at {self.properties['stop_at']}.")
+                # print(f"Estimated duration {r['end_at']} is larger than stop_at {self.properties['stop_at']}.")
                 continue
             
             
-            print(f"Estimated duration {r['end_at']} is smaller than stop_at {self.properties['stop_at']}.")
+            # print(f"Estimated duration {r['end_at']} is smaller than stop_at {self.properties['stop_at']}.")
             if  cost < plan_cost:
                 cost = plan_cost
                 sim_results = {
@@ -630,6 +664,9 @@ class OffshoreSimulator(TimedSimulator):
                     "end_at": r["end_at"],
                     "plan": self.firing_sequences
                 }
+        
+        elapsed = time.perf_counter() - start
+        sim_results["elapsed_time"] = elapsed
         return sim_results
 
         
@@ -731,7 +768,7 @@ class OffshoreSimulator(TimedSimulator):
         
         # set initial marking
         self.net.initial_marking = self.net.get_current_marking_obj()    
-        print(f"Initial marking: {self.net.initial_marking}")
+        # print(f"Initial marking: {self.net.initial_marking}")
         
         
     
@@ -765,13 +802,13 @@ class OffshoreSimulator(TimedSimulator):
             else:
                 timeout = [0]
                 while len(enabled_ts) > 0:
-                    print(f"Number of enabled ts: {len(enabled_ts)}")
+                    # print(f"Number of enabled ts: {len(enabled_ts)}")
                     
                     ## check the validity
                     invalid_ts = set()
                     for t in enabled_ts:
                         if not t.is_enabled():
-                            print(f"{t} is disabled.")
+                            # print(f"{t} is disabled.")
                             invalid_ts.add(t)
                         
                         if t.name == 't_JD0':
@@ -779,14 +816,14 @@ class OffshoreSimulator(TimedSimulator):
                             # print(f"vessel properties: {vessel.properties}")
                             # print(f"OWTs finished: {self.net.get_transition_by_name(name='t_C').times_fired}")
                             if self.net.get_transition_by_name(name='t_C').times_fired >= vessel.properties["num_to_do"]:
-                                print(f"{t} is disabled.")
+                                # print(f"{t} is disabled.")
                                 invalid_ts.add(t)
                         
                         if t.name == 't_JD1':
                             vessel = self.net.get_tokens_by_property(property_name="type", property_value="Vessel")[0]
                             if vessel.properties["current_storage"] > 0: # storage available
                                 if self.net.get_transition_by_name(name='t_C').times_fired < vessel.properties["num_to_do"]: # the goal for the installation cycle is not reached
-                                    print(f"{t} is disabled.")
+                                    # print(f"{t} is disabled.")
                                     invalid_ts.add(t)
                          
                         # if len(enabled_ts) <= 0:
@@ -820,7 +857,7 @@ class OffshoreSimulator(TimedSimulator):
                     # print(f"job_requirements: {job_requirements}")
                     
                     estimated_duration = get_operation_duration_markov(current_date=current_date, job_duration=[job_duration], job_requirements=job_requirements)
-                    print(f"estimated_duration: {estimated_duration}")
+                    # print(f"estimated_duration: {estimated_duration}")
                     
                     # fire transition
                     self.__fire(transition_to_fire=transition_to_fire)
@@ -851,14 +888,14 @@ class OffshoreSimulator(TimedSimulator):
                                                   op_end        # op_end
                                                 ))
                     
-                print(f"timeout: {max(timeout)}")
+                # print(f"timeout: {max(timeout)}")
                 yield self.env.timeout(max(timeout))
                            
                 
                     
             # Termination 1: installation cycle finished
             if self.net.get_transition_by_name(name="t_SB").times_fired >= 1:
-                print(f"Number of times fired of t_SB: {self.net.get_transition_by_name(name='t_SB').times_fired}")
+                # print(f"Number of times fired of t_SB: {self.net.get_transition_by_name(name='t_SB').times_fired}")
                 self.net.final_marking = self.net.get_current_marking_obj()
                 print(f"\n\n***** Terminating simulation - Termination Model 1 ******")
                 print(f"*******Terminate after {transition_to_fire.name}*******")

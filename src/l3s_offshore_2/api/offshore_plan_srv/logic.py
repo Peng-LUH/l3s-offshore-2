@@ -4,6 +4,7 @@ from datetime import datetime
 import os
 import numpy as np
 from pprint import pprint
+import time
 
 WEATHER_DATA_PATH = f"{os.getcwd()}/WEATHER_DATA/weatherdata.npy"
 
@@ -81,7 +82,8 @@ def convert_sim_results_to_response(sim_results:dict):
                 "planned_operationsId": [[-1], operationsId],
                 "planned_operationsStart": [[-1], operationsStart],
                 "planned_operationsEnd": [[-1], operationsEnd],
-                "planned_restockOperations": [-1]
+                "planned_restockOperations": [-1],
+                "elapsed_time": sim_results.get("elapsed_time", 0)
             }
     return  results
 
@@ -116,6 +118,7 @@ def calc_opt_schedule_single_vessel_to_horizon(scenario:dict):
     
     if r:
         timed_simulator = OffshoreSimulator(timed_petri_net=pn, properties=scenario)
+        
         
         sim_results = timed_simulator.calc_opt_schedule_single_vessel_to_horizon()
             

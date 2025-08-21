@@ -3,6 +3,7 @@ from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 import json
 from pprint import pprint
+import time
 import pm4py
 import tempfile
 # import flask
@@ -92,16 +93,22 @@ class CalcOptScheduleSingleVesselSingleInstallCycle(Resource):
         
         scenario = request.get_json(force=True, silent=False)
         
+        # start = time.perf_counter()
         sim_results = calc_opt_install_cycle_single_vessel(scenario=scenario)
+        # elapsed = time.perf_counter() - start
+        
         
         results = convert_sim_results_to_response(sim_results)
+        print("Results:", results)
+        # results["elapsed_time"] = elapsed
         
         if results is None:
             results = {
                 "planned_operationsId": [[-1], [-1]],
                 "planned_operationsStart": [[-1], [-1]],
                 "planned_operationsEnd": [[-1], [-1]],
-                "planned_restockOperations": [-1]
+                "planned_restockOperations": [-1],
+                "elapsed_time": 0
             }
         
         return results, 200
@@ -116,7 +123,9 @@ class CalcOptScheduleSingleVesselToHorizon(Resource):
         '''
         scenario = request.get_json(force=True, silent=False)
         
+        # start = time.perf_counter()
         sim_results = calc_opt_schedule_single_vessel_to_horizon(scenario=scenario)
+        # elapsed = time.perf_counter() - start
         
         results = convert_sim_results_to_response(sim_results)
         
@@ -125,7 +134,8 @@ class CalcOptScheduleSingleVesselToHorizon(Resource):
                 "planned_operationsId": [[-1], [-1]],
                 "planned_operationsStart": [[-1], [-1]],
                 "planned_operationsEnd": [[-1], [-1]],
-                "planned_restockOperations": [-1]
+                "planned_restockOperations": [-1],
+                "elapsed_time": 0
             }
         
         return results, 200
