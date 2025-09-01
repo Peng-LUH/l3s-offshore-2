@@ -11,7 +11,7 @@ Provides endpoints for:
 
 Uses the revised DTOs and calls placeholder logic functions.
 """
-
+import json, os, pathlib
 from flask import request
 from flask_restx import Namespace, Resource
 from http import HTTPStatus
@@ -31,7 +31,7 @@ from .dto import (
 # Import the placeholder logic module
 from . import logic
 
-ns = Namespace("model_x", description="Offshore Wind Farm Installation Planning API", validate=True)
+ns = Namespace("Data Transfer Objects", validate=True)
 
 # --- Register ALL defined models with the namespace for Swagger ---
 # Top Level Request/Response
@@ -166,3 +166,87 @@ class PlanningDefaultsResource(Resource):
         print("GET /planning/defaults called.")
         defaults = logic.get_default_planning_parameters()
         return defaults, HTTPStatus.OK
+    
+
+
+
+
+##################################################
+# Example data structure for valuetools2025
+##################################################
+
+@ns.route("/example/scenario")
+class ExampleScenarioResource(Resource):
+    """Provides an example scenario configuration for testing and demonstration."""
+    @ns.doc(description="Get an example scenario configuration.")
+    @ns.response(HTTPStatus.OK, "Example scenario configuration retrieved successfully.")
+    def get(self):
+        """
+        Get an example scenario configuration.
+        """
+        file_path = os.getcwd() + '/examples/scenario.json'
+        with open(file_path, 'r') as file:
+            example_scenario = json.load(file)
+        return example_scenario, HTTPStatus.OK
+        
+
+@ns.route("/example/descriptor")
+class ExampleDescriptorResource(Resource):
+    """Provides an example descriptor configuration for testing and demonstration."""
+
+    @ns.doc(description="Get an example descriptor for method registration.")
+    @ns.response(HTTPStatus.OK, "Example descriptor configuration retrieved successfully.")
+    def get(self):
+        """
+        Get an example descriptor configuration.
+        """
+        # print("GET /example/descriptor called.")
+        example_descriptor = {
+            "typology": "Typology of the descriptor",
+            "performance": "Performance of the descriptor",
+            "complexity": "Complexity of the descriptor",
+            "validity": "Validity of the descriptor",
+        }
+        return example_descriptor, HTTPStatus.OK
+        
+
+@ns.route("/example/schedule")
+class ExamplePlanResource(Resource):
+    """Provides an example plan configuration for testing and demonstration."""
+
+    @ns.doc(description="Get an example plan for the OWF installation.")
+    @ns.response(HTTPStatus.OK, "Example plan configuration retrieved successfully.")
+    def get(self):
+        """
+        Get an example plan configuration.
+        """
+        # print("GET /example/plan called.")
+        example_plan = {
+            'op': [[0,0,0,1,3,3,3,3,2]],
+            'start': [[0,19,38,57,61,73,85,97,109]],
+            'end': [[18,37,56,60,72,84,96,108,112]],
+            'restrock': [8, 320],
+            'optim_exitflag': 1,
+            'computation_time': 584.9417314529419
+        }
+        return example_plan, HTTPStatus.OK
+        
+
+@ns.route("/example/operation-mapping")
+class ExampleOperationMappingResource(Resource):
+    """Provides an example operation mapping configuration for testing and demonstration."""
+
+    @ns.doc(description="Get an example operation mapping.")
+    @ns.response(HTTPStatus.OK, "Example operation mapping configuration retrieved successfully.")
+    def get(self):
+        """
+        Get an example operation mapping configuration.
+        """
+        # print("GET /example/operation-mapping called.")
+        example_operation_mapping = {
+            "loading_owt": 3,
+            "sailing_forth": 2,
+            "sailing_back": 1,
+            "install" : 0,   
+        }
+        return example_operation_mapping, HTTPStatus.OK

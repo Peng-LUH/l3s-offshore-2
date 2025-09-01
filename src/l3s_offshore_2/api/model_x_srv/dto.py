@@ -14,6 +14,26 @@ Adheres to the ideal mental model derived from requirements.
 from flask_restx import Model, fields
 
 # =============================================================================
+# example-dto/valuetools2025
+# =============================================================================
+installation_scenario = Model("InstallationScenario", {
+    
+})
+
+
+plan = Model("Plan", {
+    'op': fields.List(fields.List(fields.Integer), description="Operation sequence plan as a list of lists of integers."),
+    'start': fields.List(fields.List(fields.Integer), description="Start time of the plan in ISO 8601 format."),
+    'end': fields.List(fields.List(fields.Integer), description="End time of the plan in ISO 8601 format."),
+    'restrock': fields.List(fields.Integer, description="Number of OWTs considered in each planning step."),
+    'optim_exitflag': fields.Integer(description="Flag indicating the optimization exit status."),
+    'computation_time': fields.Float(description="Total computation time in seconds."),
+})
+
+
+
+
+# =============================================================================
 # Base/Reusable DTOs
 # =============================================================================
 
