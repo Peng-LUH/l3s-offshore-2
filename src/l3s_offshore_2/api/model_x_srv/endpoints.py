@@ -200,13 +200,9 @@ class ExampleDescriptorResource(Resource):
         """
         Get an example descriptor configuration.
         """
-        # print("GET /example/descriptor called.")
-        example_descriptor = {
-            "typology": "Typology of the descriptor",
-            "performance": "Performance of the descriptor",
-            "complexity": "Complexity of the descriptor",
-            "validity": "Validity of the descriptor",
-        }
+        file_path = os.getcwd() + '/examples/descriptor_dto.json'
+        with open(file_path, 'r') as file:
+            example_descriptor = json.load(file)
         return example_descriptor, HTTPStatus.OK
         
 

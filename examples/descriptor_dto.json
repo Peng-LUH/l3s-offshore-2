@@ -1,0 +1,87 @@
+{
+  "modelID": "",
+  "typology": {
+    "applicationContext": {
+      "domain": "",
+      "task": ""
+    },
+    "modelFormalism": {
+      "modelType": "",
+      "formalism": ""
+    },
+    "modelStructure": {
+      "solutionMethod": "",
+      "baseModelHandlesStochasticInputs": false,
+      "solutionMethodHandlesStochasticInputs": false,
+      "stochasticOperationTimes": false,
+      "stochasticWeatherData": false,
+      "randomEquipmentBreakdownsOrDelays": false,
+      "randomComponentBreakdowns": false,
+      "stochasticRepresentations": ""
+    },
+    "modelFeatures": {
+      "multiVesselScheduling": false,
+      "supplyNetworkLocations": false,
+      "foundations": false,
+      "topStructures": false,
+      "gridConnection": false,
+      "vesselCapacity": false,
+      "basePortStorage": false,
+      "portOperations": false,
+      "componentDelivery": false,
+      "informationFlowsAndSharing": false
+    },
+    "modelAbstractness": {
+      "weatherDataTypes": "",
+      "temporalResolution": "",
+      "componentRepresentation": "",
+      "operationHandling": "",
+      "abstractnessLevel": ""
+    }
+  },
+  "performance": {
+    "solutionQuality": {
+      "solutionType": "",
+      "scenarioTypes": "",
+      "scenarioDefiningParameters": "",
+      "scenarioImpactOnPerformance": "",
+      "includesCosts": false,
+      "considersTimeCostTradeOffs": false,
+      "supportsDynamicReplanning": false,
+      "replanningFrequency": ""
+    },
+    "robustness": {
+      "modelParameterBoundaries": "",
+      "modelLimitations": "",
+      "solutionApproachLimitations": "",
+      "userWarningsAndRemarks": ""
+    }
+  },
+  "complexity": {
+    "hyperParameters": {
+      "modelHyperParameters": "",
+      "solutionMethodHyperParameters": "",
+      "scenarioDependentHyperParameters": "",
+      "numberOfAdaptedHyperParameters": 0
+    },
+    "flexibility": {
+      "operationsExtendable": false,
+      "operationTimesModifiable": false,
+      "numberOfVesselsModifiable": false,
+      "vesselsModifiable": false,
+      "supplyNetworkModifiable": false,
+      "additionalConstraintsOrFeaturesAllowed": false
+    }
+  },
+  "viability": {
+    "correctness": {
+      "verified": "",
+      "validated": ""
+    },
+    "interpretabilityAndTraceability": {
+      "explainsDecisionMaking": false,
+      "traceEntitiesOverTime": false,
+      "traceableEntities": ""
+    }
+  }
+}

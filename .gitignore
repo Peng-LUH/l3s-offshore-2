@@ -45,3 +45,8 @@ Seafile
 .gitignore
 SIMULATION-BASED_SCHEDULINGFOR_OFFSHORE.txt
 src/l3s-offshore-2
+
+.gitignore
+.venv/
+.env
+
