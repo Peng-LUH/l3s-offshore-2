@@ -29,7 +29,7 @@ from l3s_offshore_2.api.simulation_srv.endpoints import ns_sim
 from l3s_offshore_2.api.process_mining_srv.endpoints import ns_pm
 from l3s_offshore_2.api.offshore_plan_srv.endpoints import ns_offshore_plan
 
-api.add_namespace(model_x_ns, path="/dto") # Path prefix for this specific service
+api.add_namespace(model_x_ns, path="/model-x") # Path prefix for this specific service
 api.add_namespace(ns_sim, path="/simulation-petri-nets")
 api.add_namespace(ns_pm, path="/process-mining")
 api.add_namespace(ns_offshore_plan, path="/offshore-plan")
