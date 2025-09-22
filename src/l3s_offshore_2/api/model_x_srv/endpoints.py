@@ -66,29 +66,9 @@ ns.models[weather_limits_dto.name] = weather_limits_dto
 ns.models[location_dto.name] = location_dto
 # --- End Model Registration ---
 
-
-# In-memory storage for the *last submitted* planning request configuration.
-# This is primarily for demonstration/debugging as per original implementation.
-
-CURRENT_PLAN_CONFIG = {
-    "scenario_definition": {},
-    "simulation_config": {},
-    "workforce_management": {}
-}
-
 @ns.route("/planning")
 class PlanningResource(Resource):
-    """Create or Update a Planning Scenario Simulation Job."""
-
-    @ns.doc(description="Retrieve the configuration of the last submitted planning request (for debugging).")
-    @ns.marshal_with(planning_request) # Use the request DTO to show the stored config structure
-    def get(self):
-        """
-        Retrieve the configuration of the last submitted plan (In-Memory).
-        """
-        print("GET /planning called, returning CURRENT_PLAN_CONFIG")
-        # This returns the *input* configuration, not the results.
-        return CURRENT_PLAN_CONFIG, HTTPStatus.OK
+    """Create a Planning Scenario Simulation Job."""
 
     @ns.doc(description="Submit a new planning request to run a simulation.")
     @ns.expect(planning_request, validate=True)
@@ -103,51 +83,9 @@ class PlanningResource(Resource):
         data = request.json
         print("POST /planning received data.")
 
-        # Store the submitted configuration (overwrites previous)
-        CURRENT_PLAN_CONFIG["scenario_definition"] = data.get("scenario_definition", {})
-        CURRENT_PLAN_CONFIG["simulation_config"] = data.get("simulation_config", {})
-        CURRENT_PLAN_CONFIG["workforce_management"] = data.get("workforce_management", {})
-
         # --- Call the business logic ---
         status_code, response_data = logic.process_planning_request(data)
         # --- End Logic Call ---
-
-        return response_data, status_code
-
-    @ns.doc(description="Update the current in-memory plan configuration by merging the provided data.")
-    @ns.expect(planning_request, validate=True) # Expect the full model, but only parts might be provided
-    @ns.response(HTTPStatus.OK, "In-memory plan configuration updated successfully (placeholder response).", planning_response)
-    @ns.response(HTTPStatus.BAD_REQUEST, "Input validation failed.")
-    @ns.marshal_with(planning_response)
-    def put(self):
-        """
-        Update the current in-memory plan configuration (Merge).
-        Note: This updates the stored *configuration*, the effect on a running/past simulation
-        is handled by the (placeholder) logic.
-        """
-        data = request.json
-        print("PUT /planning received data for update.")
-
-        # Merge provided data into the current configuration
-        # Use .get() to avoid errors if a section is missing in the input
-        if data.get("scenario_definition"):
-            CURRENT_PLAN_CONFIG["scenario_definition"].update(data["scenario_definition"])
-        if data.get("simulation_config"):
-            CURRENT_PLAN_CONFIG["simulation_config"].update(data["simulation_config"])
-        if data.get("workforce_management"):
-            # Ensure the target exists before updating
-            if "workforce_management" not in CURRENT_PLAN_CONFIG:
-                 CURRENT_PLAN_CONFIG["workforce_management"] = {}
-            CURRENT_PLAN_CONFIG["workforce_management"].update(data["workforce_management"])
-
-        print("Current config after PUT merge:", CURRENT_PLAN_CONFIG)
-
-        # --- Call the business logic for update (placeholder) ---
-        status_code, response_data = logic.update_planning_request(data)
-        # --- End Logic Call ---
-
-        # Add the current (merged) config to the response message for clarity? Or keep it clean?
-        # response_data["message"] += f" Current Config: {CURRENT_PLAN_CONFIG}" # Optional debugging info
 
         return response_data, status_code
 

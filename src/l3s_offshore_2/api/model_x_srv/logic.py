@@ -152,26 +152,3 @@ def process_planning_request(planning_data):
             "job_id": job_id
         }
     # --- End Placeholder ---
-
-def update_planning_request(update_data):
-    """
-    Placeholder function to process an update planning request.
-    In a real system, this might re-run parts of the simulation or adjust parameters.
-    For now, it just confirms the update structure.
-    """
-    # Validation could be added here as well
-    job_id = str(uuid.uuid4()) # Generate a new ID for the update action? Or use original?
-    print(f"Logic: Received update request, Action ID: {job_id}")
-    print(f"Logic: Data intended for merging: {update_data}")
-
-    # --- Placeholder for actual update logic ---
-    # This is conceptually complex. Does it trigger a re-run? Modify an existing run?
-    # For this example, we just return a success message.
-    response_data = {
-        "status": "SUCCESS",
-        "message": f"Planning update action {job_id} processed (placeholder). Merging performed in endpoint.",
-        "job_id": job_id,
-        "results": {} # Or potentially return the updated state / results if re-run
-    }
-    return HTTPStatus.OK, response_data
-    # --- End Placeholder ---
