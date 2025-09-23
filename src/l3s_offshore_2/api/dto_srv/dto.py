@@ -1,4 +1,4 @@
-# src/l3s_offshore_2/api/model_x_srv/dto.py
+# src/l3s_offshore_2/api/dto/dto.py
 # Martin Krause
 
 """

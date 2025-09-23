@@ -1,13 +1,12 @@
-# src/l3s_offshore_2/api/model_x_srv/endpoints.py
+# src/l3s_offshore_2/api/dto/endpoints.py
 # Martin Krause
 """
-endpoints.py - API Endpoints for the Offshore Planning Service (Model X)
+endpoints.py - API Endpoints for the Offshore Planning Service (DTO)
 
 Provides endpoints for:
 - POST /planning: Creates a new planning simulation job.
-- PUT /planning: Updates parameters of the current conceptual plan (in-memory).
 - GET /planning/defaults: Retrieves default parameters for a planning request.
-- GET /planning: (Primarily for debugging) Retrieves the current in-memory plan state.
+
 
 Uses the revised DTOs and calls placeholder logic functions.
 """

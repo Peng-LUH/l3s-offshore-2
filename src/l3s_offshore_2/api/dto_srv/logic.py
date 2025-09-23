@@ -1,4 +1,4 @@
-# src/l3s_offshore_2/api/model_x_srv/logic.py
+# src/l3s_offshore_2/api/dto/logic.py
 # Martin Krause
 """
 logic.py - Placeholder for business logic and simulation execution.
