@@ -13,9 +13,10 @@ A boilerplate Flask API that demonstrates:
 2. [Setup & Installation](#setup--installation)
 3. [Running Locally](#running-locally)
 4. [API Overview](#api-overview)
-5. [Workforce & Petri-Net Parameters](#workforce--petri-net-parameters)
-6. [Deployment with Docker](#deployment-with-docker)
-7. [Testing](#testing)
+5. [API Architecture (Important)](#api-architecture)
+6. [Workforce & Petri-Net Parameters](#workforce--petri-net-parameters)
+7. [Deployment with Docker](#deployment-with-docker)
+8. [Testing](#testing)
 
 
 ---
@@ -71,6 +72,35 @@ We have three primary namespaces right now:
    - **PUT** `/model-x/planning` – update or merge changes into the existing plan
 
 All endpoints are documented via **Swagger** courtesy of **Flask-RESTx**.  
+
+---
+
+## API Architecture
+
+> ⚠️ **Important**: This project contains two API services with **incompatible parameter formats**.
+
+### The Two-Service Problem
+
+| Service | Path | Format | Purpose |
+|---------|------|--------|---------|
+| `dto_srv` | `/dto/*` | Nested, modern | Frontend defaults display |
+| `offshore_plan_srv` | `/offshore-plan/*` | Flat, MATLAB-style | Actual simulation |
+
+### Quick Reference
+
+| Use Case | Endpoint |
+|----------|----------|
+| Get parameter defaults (Frontend) | `GET /dto/planning/defaults` |
+| Run actual simulation | `POST /offshore-plan/calc-opt-*` |
+| Generate schedule PDF | `POST /offshore-plan/display-single-vessel-schedule` |
+
+### Known Limitations
+
+1. **Format Incompatibility**: `dto_srv` uses nested JSON, `offshore_plan_srv` uses flat JSON
+2. **No simulation in dto_srv**: The `POST /dto/planning` endpoint returns mock data only
+3. **No defaults in offshore_plan_srv**: No `/defaults` endpoint available
+
+**For detailed documentation, see:** [`src/l3s_offshore_2/api/API_ARCHITECTURE.md`](src/l3s_offshore_2/api/API_ARCHITECTURE.md)
 
 ---
 

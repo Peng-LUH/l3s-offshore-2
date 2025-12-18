@@ -1,14 +1,32 @@
 # src/l3s_offshore_2/api/dto/endpoints.py
 # Martin Krause
+#
+# =============================================================================
+# ARCHITECTURAL NOTICE
+# =============================================================================
+# ACTIVE ENDPOINTS:
+#   - GET /planning/defaults  -> Used by Frontend for parameter display
+#   - GET /example/*          -> Used for Valuetools2025 / benchmarking
+#
+# PLACEHOLDER ENDPOINTS (not connected to actual simulation):
+#   - POST /planning          -> Returns mock data only
+#
+# Actual simulation endpoints are in `offshore_plan_srv`:
+#   - POST /offshore-plan/calc-opt-install-cycle-single-vessel
+#   - POST /offshore-plan/calc-opt-schedule-single-vessel-to-horizon
+#
+# See: src/l3s_offshore_2/api/API_ARCHITECTURE.md for full documentation.
+# =============================================================================
+
 """
 endpoints.py - API Endpoints for the Offshore Planning Service (DTO)
 
 Provides endpoints for:
-- POST /planning: Creates a new planning simulation job.
-- GET /planning/defaults: Retrieves default parameters for a planning request.
+- GET /planning/defaults: Retrieves default parameters for Frontend display.
+- GET /example/*: Example data for benchmarking/Valuetools2025.
+- POST /planning: PLACEHOLDER - returns mock data, not connected to simulation.
 
-
-Uses the revised DTOs and calls placeholder logic functions.
+NOTE: For actual simulation, use offshore_plan_srv endpoints.
 """
 import json, os, pathlib
 from flask import request

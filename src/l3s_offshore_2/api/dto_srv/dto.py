@@ -1,5 +1,17 @@
 # src/l3s_offshore_2/api/dto/dto.py
 # Martin Krause
+#
+# =============================================================================
+# ARCHITECTURAL NOTICE
+# =============================================================================
+# This module defines DTOs in a NESTED, MODERN format. However, actual simulation
+# is performed by `offshore_plan_srv` which uses a FLAT, MATLAB-compatible format.
+#
+# These two formats are INCOMPATIBLE and require conversion.
+# This service currently only provides defaults for Frontend display.
+#
+# See: src/l3s_offshore_2/api/API_ARCHITECTURE.md for full documentation.
+# =============================================================================
 
 """
 dto.py - Data Transfer Objects for Offshore Wind Farm Installation Planning
@@ -9,6 +21,9 @@ Separates Scenario Definition, Simulation Configuration, and optional Workforce 
 Focuses on configuring the simulation run, assuming the Petri Net model is provided externally (e.g., PNML).
 Uses snake_case and full descriptive names.
 Adheres to the ideal mental model derived from requirements.
+
+NOTE: This is a design document / UI-defaults provider. Actual simulation uses
+offshore_plan_srv with a different (flat) parameter format.
 """
 
 from flask_restx import Model, fields

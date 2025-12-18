@@ -1,14 +1,29 @@
 # src/l3s_offshore_2/api/dto/logic.py
 # Martin Krause
+#
+# =============================================================================
+# ARCHITECTURAL NOTICE
+# =============================================================================
+# This module contains PLACEHOLDER logic only. The actual simulation
+# implementation exists in `offshore_plan_srv/logic.py` using gspn4py.
+#
+# The `process_planning_request()` function returns MOCK DATA.
+# The `get_default_planning_parameters()` function is ACTIVE and used by Frontend.
+#
+# See: src/l3s_offshore_2/api/API_ARCHITECTURE.md for full documentation.
+# =============================================================================
+
 """
 logic.py - Placeholder for business logic and simulation execution.
 
-This module will contain the core functions to:
-- Validate the incoming planning request data.
-- Instantiate and configure the simulation model (e.g., GSPN simulator).
-- Run the simulation based on the provided configuration.
-- Calculate KPIs and format results.
-- Generate default parameter structures.
+ACTIVE FUNCTIONS:
+- get_default_planning_parameters(): Returns defaults for Frontend UI.
+
+PLACEHOLDER FUNCTIONS (not implemented):
+- process_planning_request(): Returns mock data only.
+- validate_planning_request(): Basic validation, not production-ready.
+
+For actual simulation logic, see: offshore_plan_srv/logic.py
 """
 import uuid
 from http import HTTPStatus
