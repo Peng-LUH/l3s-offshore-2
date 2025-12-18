@@ -1,22 +1,21 @@
 # L3S Offshore 2
 
-A boilerplate Flask API that demonstrates:
-- **Flask-RESTx** routing and auto-docs,
-- **SQLAlchemy** (basic setup),
-- **Workforce Management (WFM)**, **Scenario** and **Petri Net (PN)** parameter handling,
-- A **Docker** environment for containerization,
-- Jenkins pipeline for CI/CD,
-- Tox/pytest for testing.
+A Flask-based API for offshore wind farm installation planning and simulation.
+
+**Key Features:**
+- **Flask-RESTx** API with auto-generated Swagger documentation
+- **Petri Net simulation** for installation scheduling (via gspn4py)
+- **Process Mining** utilities for event log analysis
+- **Docker** containerization for deployment
+- Tox/pytest for testing
 
 ## Table of Contents
-1. [Project Structure](#project-structure)
-2. [Setup & Installation](#setup--installation)
-3. [Running Locally](#running-locally)
-4. [API Overview](#api-overview)
-5. [API Architecture (Important)](#api-architecture)
-6. [Workforce & Petri-Net Parameters](#workforce--petri-net-parameters)
-7. [Deployment with Docker](#deployment-with-docker)
-8. [Testing](#testing)
+1. [Setup & Installation](#setup--installation)
+2. [Running Locally](#running-locally)
+3. [API Overview](#api-overview)
+4. [API Architecture (Important)](#api-architecture)
+5. [Deployment with Docker](#deployment-with-docker)
+6. [Testing](#testing)
 
 
 ---
@@ -54,24 +53,35 @@ flask run --host=0.0.0.0 --port=9040
 ```
 
 Navigate to:  
-[http://localhost:9040/l3s-offshore-2/](http://localhost:9040/l3s-offshore-2/)  
-You’ll see the root redirect (if `HOST_IP` is set). Or access the **Swagger UI** at:  
-[http://localhost:9040/l3s-offshore-2/swagger.json](http://localhost:9040/l3s-offshore-2/swagger.json) or wherever the docs are generated.
+- **Swagger UI**: [http://localhost:9040/l3s-offshore-2/](http://localhost:9040/l3s-offshore-2/)
+- **OpenAPI Spec (JSON)**: [http://localhost:9040/l3s-offshore-2/swagger.json](http://localhost:9040/l3s-offshore-2/swagger.json)
 
 ---
 
 ## API Overview
 
-We have three primary namespaces right now:
+The API provides four namespaces:
 
-1. **`test`** – Example endpoints demonstrating GET/POST with a simple `test_model`.
-2. **`random`** – Provides a `get-random-recommendation` POST endpoint that reads a JSON from local disk and returns random items.
-3. **`model_x`** – The main area for the planning scenario:
-   - **GET** `/model-x/planning` – retrieve the current in-memory plan
-   - **POST** `/model-x/planning` – create a new plan from WFM + PN parameters
-   - **PUT** `/model-x/planning` – update or merge changes into the existing plan
+| Namespace | Path | Description |
+|-----------|------|-------------|
+| **Offshore Plan** | `/offshore-plan/*` | Simulation and scheduling (production) |
+| **Simulation** | `/simulation-petri-nets/*` | Generic Petri net simulation |
+| **Process Mining** | `/process-mining/*` | Event log analysis utilities |
+| **DTO** | `/dto/*` | Parameter defaults and examples |
 
-All endpoints are documented via **Swagger** courtesy of **Flask-RESTx**.  
+### Main Endpoints
+
+**Offshore Planning (Simulation):**
+- `POST /offshore-plan/calc-opt-install-cycle-single-vessel` – Run single installation cycle simulation
+- `POST /offshore-plan/calc-opt-schedule-single-vessel-to-horizon` – Run simulation to planning horizon
+- `POST /offshore-plan/display-single-vessel-schedule` – Generate schedule PDF
+- `GET /offshore-plan/get-tpn-cyclic-model` – Get Petri net model definition
+
+**Parameter Defaults:**
+- `GET /dto/planning/defaults` – Get default parameters (for Frontend display)
+- `GET /dto/example/scenario` – Get example scenario configuration
+
+All endpoints are documented via **Swagger UI** at runtime.  
 
 ---
 
@@ -101,22 +111,6 @@ All endpoints are documented via **Swagger** courtesy of **Flask-RESTx**.
 3. **No defaults in offshore_plan_srv**: No `/defaults` endpoint available
 
 **For detailed documentation, see:** [`src/l3s_offshore_2/api/API_ARCHITECTURE.md`](src/l3s_offshore_2/api/API_ARCHITECTURE.md)
-
----
-
-## Workforce & Petri-Net Parameters
-
-The core parameters for scenario, workforce management and the Petri net simulation are defined in `dto.py` inside the `model_x_srv` folder.
-
-For further documentation access the **Swagger UI** at:  
-[http://localhost:9040/l3s-offshore-2/swagger.json](http://localhost:9040/l3s-offshore-2/swagger.json)
-
-
-Example JSON for a `POST` request to `/model-x/planning` might look like:
-
-```json
-Todo
-```
 
 ---
 
