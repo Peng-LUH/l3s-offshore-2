@@ -173,7 +173,7 @@ Two independent parameter formats exist in this project:
 | `/dto/planning/defaults` | GET | ✅ ACTIVE | Returns default parameters (nested format) for Frontend |
 | `/dto/planning` | POST | ⚠️ PLACEHOLDER | Returns mock data, not connected to simulation |
 | `/dto/example/scenario` | GET | ✅ ACTIVE | Returns example scenario (flat format from file) |
-| `/dto/example/descriptor` | GET | ✅ ACTIVE | Returns method descriptor for Valuetools2025 |
+| `/dto/example/descriptor` | GET | ✅ ACTIVE | Returns method descriptor (purpose: testing/benchmarking) |
 | `/dto/example/schedule` | GET | ✅ ACTIVE | Returns example schedule output |
 | `/dto/example/operation-mapping` | GET | ✅ ACTIVE | Returns operation ID mapping |
 
@@ -214,12 +214,30 @@ demos/demo_request.ipynb:
        └── Uses flat format directly (no dto_srv involvement)
 ```
 
-### Valuetools2025 / Benchmarking
+### Example Data Endpoints
 
-```
-GET /dto/example/scenario     → Returns scenario.json (flat format)
-GET /dto/example/descriptor   → Returns descriptor_dto.json
-```
+These endpoints serve **static example data** for documentation and testing.
+They demonstrate the expected input/output formats without running actual simulations.
+
+| Endpoint | Data Source | Purpose |
+|----------|-------------|---------|
+| `/dto/example/scenario` | `examples/scenario.json` | Complete simulation input (FLAT format) |
+| `/dto/example/descriptor` | `examples/descriptor_dto.json` | Method metadata schema template |
+| `/dto/example/schedule` | Hardcoded | Sample simulation output format |
+| `/dto/example/operation-mapping` | Hardcoded | Operation ID ↔ name mapping |
+
+**Important**: `/example/scenario` returns data in the **FLAT format** that is compatible
+with `offshore_plan_srv` simulation endpoints. This is different from `/planning/defaults`
+which returns **NESTED format**.
+
+**Superseded by**: For actual simulations, use `offshore_plan_srv` endpoints directly:
+- `POST /offshore-plan/calc-opt-install-cycle-single-vessel`
+- `POST /offshore-plan/calc-opt-schedule-single-vessel-to-horizon`
+
+The example endpoints remain useful for:
+- Understanding expected data formats before integration
+- API documentation and Swagger examples
+- Testing client implementations without running simulations
 
 ---
 

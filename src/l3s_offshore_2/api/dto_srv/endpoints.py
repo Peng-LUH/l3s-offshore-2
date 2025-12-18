@@ -6,7 +6,7 @@
 # =============================================================================
 # ACTIVE ENDPOINTS:
 #   - GET /planning/defaults  -> Used by Frontend for parameter display
-#   - GET /example/*          -> Used for Valuetools2025 / benchmarking
+#   - GET /example/*          -> Example data (testing/documentation/benchmarking)
 #
 # PLACEHOLDER ENDPOINTS (not connected to actual simulation):
 #   - POST /planning          -> Returns mock data only
@@ -23,7 +23,7 @@ endpoints.py - API Endpoints for the Offshore Planning Service (DTO)
 
 Provides endpoints for:
 - GET /planning/defaults: Retrieves default parameters for Frontend display.
-- GET /example/*: Example data for benchmarking/Valuetools2025.
+- GET /example/*: Example data (testing/documentation/benchmarking purposes).
 - POST /planning: PLACEHOLDER - returns mock data, not connected to simulation.
 
 NOTE: For actual simulation, use offshore_plan_srv endpoints.
@@ -126,18 +126,57 @@ class PlanningDefaultsResource(Resource):
 
 
 
-##################################################
-# Example data structure for valuetools2025
-##################################################
+# =============================================================================
+# EXAMPLE DATA ENDPOINTS
+# =============================================================================
+#
+# PURPOSE:
+# These endpoints serve static example data for API documentation, testing,
+# and demonstration purposes. They provide sample inputs and outputs that
+# illustrate the expected data formats.
+#
+# SUPERSEDED BY:
+# The `/example/scenario` endpoint returns data in the FLAT format which is
+# identical to what `offshore_plan_srv` expects. For actual simulation,
+# use the production endpoints:
+#   - POST /offshore-plan/calc-opt-install-cycle-single-vessel
+#   - POST /offshore-plan/calc-opt-schedule-single-vessel-to-horizon
+#
+# The `/example/schedule` and `/example/operation-mapping` endpoints show
+# the OUTPUT format that `offshore_plan_srv` returns after simulation.
+#
+# DATA SOURCES:
+#   /example/scenario   -> examples/scenario.json (flat MATLAB-style params)
+#   /example/descriptor -> examples/descriptor_dto.json (method metadata schema)
+#   /example/schedule   -> Hardcoded sample simulation output
+#   /example/operation-mapping -> Hardcoded operation ID to name mapping
+# =============================================================================
 
 @ns.route("/example/scenario")
 class ExampleScenarioResource(Resource):
-    """Provides an example scenario configuration for testing and demonstration."""
-    @ns.doc(description="Get an example scenario configuration.")
+    """
+    Returns an example scenario configuration in FLAT format.
+    
+    This is the same format expected by `offshore_plan_srv` simulation endpoints.
+    Use this as a template for constructing simulation requests.
+    
+    Note: This returns FLAT format (MATLAB-style), NOT the nested format
+    that `/planning/defaults` returns. The two formats are incompatible.
+    """
+    @ns.doc(description="Get an example scenario configuration (flat format, compatible with offshore_plan_srv).")
     @ns.response(HTTPStatus.OK, "Example scenario configuration retrieved successfully.")
     def get(self):
         """
         Get an example scenario configuration.
+        
+        Returns the contents of examples/scenario.json which contains
+        a complete simulation scenario with:
+        - Optimization parameters (optim_*)
+        - Petri net parameters (pn_*)
+        - Scenario definition (scenario_*, operation_*, vessel_*, etc.)
+        - Initial state (state_*)
+        - Cost parameters (cost_*)
+        - Geographic coordinates
         """
         file_path = os.getcwd() + '/examples/scenario.json'
         with open(file_path, 'r') as file:
@@ -147,13 +186,30 @@ class ExampleScenarioResource(Resource):
 
 @ns.route("/example/descriptor")
 class ExampleDescriptorResource(Resource):
-    """Provides an example descriptor configuration for testing and demonstration."""
-
-    @ns.doc(description="Get an example descriptor for method registration.")
+    """
+    Returns a method descriptor schema template.
+    
+    This is a metadata structure for describing simulation methods,
+    including model typology, performance characteristics, complexity,
+    and viability information. Intended for method registration or
+    benchmarking frameworks.
+    
+    Note: This is a TEMPLATE with empty values. Fill in the fields
+    to describe your specific simulation method.
+    """
+    @ns.doc(description="Get a method descriptor template (metadata schema for simulation methods).")
     @ns.response(HTTPStatus.OK, "Example descriptor configuration retrieved successfully.")
     def get(self):
         """
-        Get an example descriptor configuration.
+        Get a method descriptor template.
+        
+        Returns the contents of examples/descriptor_dto.json which provides
+        a schema for describing simulation methods with fields for:
+        - modelID: Unique identifier
+        - typology: Application context, formalism, structure, features
+        - performance: Solution quality, robustness metrics
+        - complexity: Hyperparameters, flexibility options
+        - viability: Correctness verification, traceability
         """
         file_path = os.getcwd() + '/examples/descriptor_dto.json'
         with open(file_path, 'r') as file:
@@ -163,15 +219,30 @@ class ExampleDescriptorResource(Resource):
 
 @ns.route("/example/schedule")
 class ExamplePlanResource(Resource):
-    """Provides an example plan configuration for testing and demonstration."""
-
-    @ns.doc(description="Get an example plan for the OWF installation.")
+    """
+    Returns an example simulation output (schedule).
+    
+    This shows the format of results returned by offshore_plan_srv
+    simulation endpoints. Use this to understand the output structure
+    before running actual simulations.
+    
+    Output format:
+    - op: Operation IDs per vessel [[vessel1_ops], [vessel2_ops]]
+    - start: Start times for each operation
+    - end: End times for each operation
+    - restock: Port restock event times
+    - optim_exitflag: Optimizer exit status (1 = success)
+    - computation_time: Time taken for optimization (seconds)
+    """
+    @ns.doc(description="Get an example simulation output (schedule format from offshore_plan_srv).")
     @ns.response(HTTPStatus.OK, "Example plan configuration retrieved successfully.")
     def get(self):
         """
-        Get an example plan configuration.
+        Get an example schedule output.
+        
+        Returns a hardcoded sample that demonstrates the output format
+        of the offshore_plan_srv simulation endpoints.
         """
-        # print("GET /example/plan called.")
         example_plan = {
             'op': [[0,0,0,1,3,3,3,3,2]],
             'start': [[0,19,38,57,61,73,85,97,109]],
@@ -185,15 +256,28 @@ class ExamplePlanResource(Resource):
 
 @ns.route("/example/operation-mapping")
 class ExampleOperationMappingResource(Resource):
-    """Provides an example operation mapping configuration for testing and demonstration."""
-
-    @ns.doc(description="Get an example operation mapping.")
+    """
+    Returns the operation ID to name mapping.
+    
+    Maps human-readable operation names to the numeric IDs used in
+    schedule outputs. Required to interpret the 'op' arrays from
+    simulation results.
+    
+    Mapping:
+    - 0: install (OWT installation at site)
+    - 1: sailing_back (return voyage to port)
+    - 2: sailing_forth (voyage to installation site)  
+    - 3: loading_owt (loading components at port)
+    """
+    @ns.doc(description="Get the operation ID mapping (numeric ID to operation name).")
     @ns.response(HTTPStatus.OK, "Example operation mapping configuration retrieved successfully.")
     def get(self):
         """
-        Get an example operation mapping configuration.
+        Get operation ID to name mapping.
+        
+        Returns a dictionary mapping operation names to their numeric IDs
+        as used in simulation schedule outputs.
         """
-        # print("GET /example/operation-mapping called.")
         example_operation_mapping = {
             "loading_owt": 3,
             "sailing_forth": 2,
